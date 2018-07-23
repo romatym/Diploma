@@ -1,0 +1,82 @@
+<!doctype html>
+<html lang="en" class="no-js">
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+
+	<link href='http://fonts.googleapis.com/css?family=Open+Sans:400,300,600,700' rel='stylesheet' type='text/css'>
+
+	<link rel="stylesheet" href="css/reset.css"> <!-- CSS reset -->
+	<link rel="stylesheet" href="css/style.css"> <!-- Resource style -->
+	<script src="js/modernizr.js"></script> <!-- Modernizr -->
+	<title>FAQ</title>
+</head>
+<body>
+{% if admin=='' %}
+    <a href="index.php/login">Войти</a>
+{% else %}
+    <a href="index.php/accounts">{{ admin }}</a>
+    <a href="index.php/logout"> Выйти</a>
+{% endif %}
+<header>
+    <h1>FAQ</h1>
+</header>
+
+<section class="cd-faq">
+	<ul class="cd-faq-categories">
+            {% for key,value in categories %}
+		<li><a 
+                    {% if value.id == selectedCategory %}
+                        class="selected"
+                    {% endif %}
+                    href="#{{ value.name }}">{{ value.name }}
+                    </a>
+                </li>
+            {% endfor %}
+	</ul> <!-- cd-faq-categories -->
+
+	<div class="cd-faq-items">
+            {% for key,value in treeOfQuestions %}
+		<ul id="{{ categories[key].name }}" class="cd-faq-group">
+
+			<li class="cd-faq-title">
+                            <h2>{{ categories[key].name }}</h2>
+                            
+                        </li>
+
+                    {% for keyQuestion,valueQuestion in value %}
+			<li>
+				<a class="cd-faq-trigger" href="#0">{{ valueQuestion.topic }}</a>
+				<div class="cd-faq-content">
+                                    
+                                    <p>{{ valueQuestion.question }}</p>
+
+                                    <br>
+                                    <a href='index.php/showAnswers?action=showAnswers&questionId={{ valueQuestion.id }}'>Смотреть ответы</a>
+
+                                    {% if admin!='' %}
+                                        <a href='index.php/answer?action=answer&questionId={{ valueQuestion.id }}'>Ответить</a>
+                                        {% if not valueQuestion.hidden %}
+                                            <a href='index.php/hideQuestion?action=hide&questionId={{ valueQuestion.id }}'>Скрыть</a>
+                                        {% endif %}
+                                        {% if valueQuestion.hidden %}
+                                            <a href='index.php/publishQuestion?action=publish&questionId={{ valueQuestion.id }}'>Публиковать</a>
+                                        {% endif %}
+                                        <a href='index.php/deleteQuestion?action=delete&questionId={{ valueQuestion.id }}'>Удалить</a>
+                                    {% endif %}
+				</div> <!-- cd-faq-content -->
+                            
+			</li>
+                    {% endfor %}
+                    <a href='index.php/askQuestion?category={{ categories[key].id }}'>Задать вопрос</a>
+		</ul> <!-- cd-faq-group -->
+            {% endfor %}
+
+	</div> <!-- cd-faq-items -->
+	<a href="#0" class="cd-close-panel">Close</a>
+</section> <!-- cd-faq -->
+<script src="js/jquery-2.1.1.js"></script>
+<script src="js/jquery.mobile.custom.min.js"></script>
+<script src="js/main.js"></script> <!-- Resource jQuery -->
+</body>
+</html>

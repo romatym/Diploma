@@ -1,0 +1,69 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+    <title>Авторизация</title>
+</head>
+<body>
+<section id="question">
+    <div class="container">
+        <div class="row">
+            <div class="col-xs-12">
+                <div class="form-wrap">
+                    <h1>Задайте вопрос</h1>
+                    
+                    
+                    {% if question.id=='' %}
+                        <form action="sendQuestion" method="POST">
+                    {% else %}
+                        <form action="changeQuestion" method="POST">
+                    {% endif %}
+                        <div class="form-group">
+                            <label for="sel1" >Выберите тему:</label>
+                            <select class="form-control" name="category" id="sel1">
+                                {% for key,value in categories %}
+                                    {% if value.name == question.category %}
+                                        <option selected>{{ value.name }}</option>
+                                    {% else %}
+                                        <option>{{ value.name }}</option>
+                                    {% endif %}
+                                {% endfor %}
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="lg" class="sr-only">Ваше имя</label>
+                            <input type="text" placeholder="Имя" name="name" id="lg" class="form-control" value="{{ question.author }}">
+                        </div>
+                        <div class="form-group">
+                            <label for="key" class="sr-only">Email</label>
+                            <input type="text" placeholder="Email" name="email" id="key" class="form-control" value="{{ question.email }}">
+                        </div>
+                        <div class="form-group">
+                            <label for="key" class="sr-only">Тема</label>
+                            <input type="text" placeholder="topic" name="topic" id="key" class="form-control" value="{{ question.topic }}">
+                        </div>
+                        <div class="form-group">
+                            <label for="comment">Вопрос:</label>
+                            <textarea class="form-control" rows="5" name="question" id="comment">{{ question.question }}</textarea>
+                        </div>
+                        
+                        {% if question.id == '' %}
+                            <input type="submit" name="sendQuestion" id="btn-success" class="btn btn-custom btn-lg btn-block" value="Задать">
+                        {% else %}
+                            <input type="submit" name="changeQuestion" id="btn-success" class="btn btn-custom btn-lg btn-block" value="Изменить">
+                        {% endif %}
+                        <input type="hidden" name="questionId" value="{{ question.id }}">
+
+                    </form>
+
+                    <hr>
+                </div>
+            </div> <!-- /.col-xs-12 -->
+        </div> <!-- /.row -->
+    </div> <!-- /.container -->
+</section>
+</body>
+</html>

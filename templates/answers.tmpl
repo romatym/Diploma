@@ -1,0 +1,50 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+    <title>Авторизация</title>
+</head>
+<body>
+<section id="question">
+    <div class="container">
+        <div class="row">
+            <div class="col-xs-12">
+                <div class="form-wrap">
+                    <h1>Вопрос:</h1>
+                    
+                        <div class="panel panel-default">
+                          <div class="panel-heading">{{ question.topic }}</div>
+                          <div class="panel-body" rows="5">{{ question.question }}</div>
+                        </div>
+                        {% if not admin=='' %}
+                            <a href='questionModify?action=questionModify&questionId={{ question.id }}'>Редактировать вопрос</a>
+                            <br>
+                            <br>
+                            <br>
+                        {% endif %}
+
+                        <h1>Ответы:</h1>
+
+                        {% for key,value in answers %}
+                            <div class="panel panel-default">
+                                <div class="panel-body" rows="5">{{ value.answer }}</div>
+                            </div>
+                            {% if not admin=='' %}
+                            <a href='answerModify?action=answerModify&questionId={{ question.id }}&answerId={{ value.id }}&answerText={{ value.answer }}'>Редактировать ответ</a>
+                            <br>
+                            <br>
+                            <br>
+                            {% endif %}
+                            
+                        {% endfor %}
+                    <hr>
+                </div>
+            </div> <!-- /.col-xs-12 -->
+        </div> <!-- /.row -->
+    </div> <!-- /.container -->
+</section>
+</body>
+</html>

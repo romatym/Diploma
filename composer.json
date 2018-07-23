@@ -1,0 +1,13 @@
+{
+    "autoload": {
+        "psr-4": {
+            "Forum\\": "classes\\Forum\\",
+			"App\\": "classes\\App\\",
+			"Controllers\\": "classes\\Controllers\\",
+			"Functions\\": "classes\\Functions\\"
+        }
+    },
+    "require": {
+        "twig/twig": "^2.5"
+    }
+}

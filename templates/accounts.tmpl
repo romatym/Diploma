@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="UTF-8">
+        <title></title>
+        
+        <style>
+            table { 
+                border-spacing: 0;
+                border-collapse: collapse;
+            }
+
+            table td, table th {
+                border: 1px solid #ccc;
+                padding: 5px;
+            }
+
+            table th {
+                background: #eee;
+            }
+        </style>
+    </head>
+    <body>
+        
+        <h1>Здравствуйте, {{admin}}! </h1>
+        <h2>Редактирование аккаунтов:</h2>
+
+        <form action="actionAccounts" method="POST">
+            <input type="text" name="login" placeholder="Логин" value="" />
+            <input type="password" name="password" placeholder="Пароль" value="" />
+            <input type="submit" name="addAdmin" value="Добавить администратора" />
+        </form>
+        <br>
+        
+        <!--таблица аккаунтов-->
+        <table>
+            <tr>
+                <th>Логин</th>
+                <th>Действие</th>
+            </tr>
+                    
+        
+                {% for key,row in admins %}
+                
+                <tr>
+                    <td>{{ row.login }}</td>
+                    <td>
+                        <a href='actionAccounts?id={{row.id}}&action=changePassword'>Изменить пароль</a>
+                        <a href='actionAccounts?id={{row.id}}&action=deleteAdmin'>Удалить</a>
+                    </td>
+                </tr>
+                
+                {% endfor %}
+                
+        </table>
+        
+        <br>
+        <br>
+        <h2>Редактирование тем:</h2>
+
+    <form action="actionAccounts" method="POST">
+            <input type="text" name="topic" placeholder="Тема" value="" />
+            <input type="submit" name="addTopic" value="Добавить тему" />
+        </form>
+        <br>
+        
+        <!--таблица тем-->
+        <table>
+            <tr>
+                <th>Тема</th>
+                <th>Действие</th>
+            </tr>
+                    
+        
+                {% for key,row in topics %}
+                
+                <tr>
+                    <td>{{ row.name }}</td>
+                    <td>
+                        <a href='actionAccounts?id={{row.id}}&action=changeTopic'>Изменить тему</a>
+                        <a href='actionAccounts?id={{row.id}}&action=deleteTopic'>Удалить</a>
+                    </td>
+                </tr>
+                
+                {% endfor %}
+                
+        </table>
+
+        <br>
+        <br>
+        <a href="logout">Выход</a>
+        <a href="home">Вернуться на главную страницу</a>
+        
+    </body>
+</html>

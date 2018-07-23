@@ -1,0 +1,50 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+    <title>Авторизация</title>
+</head>
+<body>
+<section id="question">
+    <div class="container">
+        <div class="row">
+            <div class="col-xs-12">
+                <div class="form-wrap">
+                    <h1>Введите ответ:</h1>
+                    
+                    {% if answerText=='' %}
+                        <form action="sendAnswer" method="POST">
+                    {% else %}
+                        <form action="changeAnswer" method="POST">
+                    {% endif %}
+                        <div class="panel panel-default">
+                          <div class="panel-heading">{{ question.topic }}</div>
+                          <div class="panel-body" rows="5">{{ question.question }}</div>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="comment">Ответ:</label>
+                            <textarea class="form-control" rows="5" name="answer" id="comment">{{ answerText }}</textarea>
+                        </div>
+                        
+                        {% if answerText=='' %}
+                            <input action="sendAnswer" type="submit" name="sendAnswer" id="btn-success" class="btn btn-custom btn-lg btn-block" value="Ответить">
+                        {% else %}
+                            <input action="changeAnswer" type="submit" name="changeAnswer" id="btn-success" class="btn btn-custom btn-lg btn-block" value="Изменить ответ">
+                        {% endif %}
+                        <input type="hidden" name="answerId" value="{{ answerId }}">
+                        <input type="hidden" name="questionId" value="{{ question.id }}">
+
+                    </form>
+
+                    <hr>
+                </div>
+            </div> <!-- /.col-xs-12 -->
+        </div> <!-- /.row -->
+    </div> <!-- /.container -->
+</section>
+</body>
+</html>
