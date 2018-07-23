@@ -22,7 +22,7 @@ class Controller {
             // передаём в шаблон переменные и значения
             // выводим сформированное содержание
             echo $template->render($params);
-            var_dump($template);
+            //var_dump($template);
         } catch (Exception $e) {
             die('ERROR: ' . $e->getMessage());
         }        
