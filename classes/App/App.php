@@ -1,7 +1,7 @@
 <?php
 
-class App {
-        
+class App 
+{
     public static $router;
     public static $db;
     public static $kernel;
@@ -13,7 +13,8 @@ class App {
         
     }
     
-    public static function bootstrap() {
+    public static function bootstrap() 
+    {
         static::$router = new App\Router();
         static::$kernel = new App\Kernel();
         static::$Controller = new App\Controller();

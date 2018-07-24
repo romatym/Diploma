@@ -2,12 +2,15 @@
 
 namespace Forum;
 
-class CategoriesManager {
-    
-    public function __construct() {
+class CategoriesManager 
+{
+
+    public function __construct() 
+    {
     }
-    
-    public function getCategories($pdo) {
+
+    public function getCategories($pdo) 
+    {
         $sql = "SELECT id, name FROM categories";
         $stmt = $pdo->prepare($sql);
         $result = $stmt->execute();
@@ -22,11 +25,12 @@ class CategoriesManager {
         return $table;
     }
 
-    public function addTopic($name) {
-        
+    public function addTopic($name) 
+    {
+
         $Db = new \App\Db();
         $pdo = $Db->pdo;
-        
+
         $sql = "INSERT INTO categories (name) VALUES (?)";
         $stmt = $pdo->prepare($sql);
         $result = $stmt->execute([$name]);
@@ -35,12 +39,13 @@ class CategoriesManager {
             return($stmt->errorInfo());
         }
     }
-    
-    public function deleteTopic($id) {
-        
+
+    public function deleteTopic($id) 
+    {
+
         $Db = new \App\Db();
         $pdo = $Db->pdo;
-        
+
         $sql = "delete from categories where id = ?";
 
         $stmt = $pdo->prepare($sql);
@@ -50,13 +55,14 @@ class CategoriesManager {
             return($stmt->errorInfo());
         }
     }
-    
-    function SetCurrentCategory($Category_id) {
 
+    function SetCurrentCategory($Category_id) 
+    {
         setcookie('category', $Category_id, time() + 3600);
     }
 
-    function GetCurrentCategoryFromCookies() {
+    function getCurrentCategoryFromCookies() 
+    {
 
         if (isset($_COOKIE['category'])) {
             return $_COOKIE['category'];
@@ -65,7 +71,8 @@ class CategoriesManager {
         }
     }
 
-    function getCategoryByName($pdo, $name) {
+    function getCategoryByName($pdo, $name) 
+    {
 
         $sql = "SELECT id, name FROM categories where name='" . $name . "'";
         $table = $pdo->query($sql);
@@ -74,4 +81,4 @@ class CategoriesManager {
         }
     }
 
-} 
+}

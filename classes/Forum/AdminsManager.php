@@ -2,13 +2,15 @@
 
 namespace Forum;
 
-class AdminsManager {
+class AdminsManager 
+{
     
-    public function __construct() {
+    public function __construct() 
+    {
     }
     
-    public function addAdmin($login, $password) {
-        
+    public function addAdmin($login, $password) 
+    {
         $Db = new \App\Db();
         $pdo = $Db->pdo;
         
@@ -21,12 +23,12 @@ class AdminsManager {
         }
     }
     
-    public function setPassword($login, $password) {
-        
+    public function setPassword($login, $password) 
+    {
         $Db = new \App\Db();
         $pdo = $Db->pdo;
         
-        $sql = "UPDATE admins SET password = ? where login = ?";
+        $sql = "UPDATE admins SET password = ? WHERE login = ?";
 
         $stmt = $pdo->prepare($sql);
         $result = $stmt->execute([$password, $login]);
@@ -36,12 +38,13 @@ class AdminsManager {
         }
     }
     
-    public function deleteAdmin($id) {
+    public function deleteAdmin($id) 
+    {
         
         $Db = new \App\Db();
         $pdo = $Db->pdo;
         
-        $sql = "delete from admins where id = ?";
+        $sql = "DELETE FROM admins WHERE id = ?";
 
         $stmt = $pdo->prepare($sql);
         $result = $stmt->execute([$id]);
@@ -51,7 +54,8 @@ class AdminsManager {
         }
     }
     
-    public function getAdminsList($pdo) {
+    public function getAdminsList($pdo) 
+    {
 
         $sql = "SELECT login, id FROM admins";
 
@@ -64,35 +68,40 @@ class AdminsManager {
         return $stmt->fetchAll();
     }
 
-    function getAdminByLogin($pdo, $login) {
+    function getAdminByLogin($pdo, $login) 
+    {
 
-        $sql = "SELECT id, login, password FROM admins where login = '" . $login . "'";
-        $table = $pdo->query($sql);
-        foreach ($table as $row) {
-            return $row;
+        $sql = "SELECT id, login, password FROM admins WHERE login = ?"; //'" . $login . "'";
+//        $stmt = $pdo->prepare($sql);
+        $stmt = $pdo->prepare($sql);
+        $result = $stmt->execute([$login]);
+
+        if (!$result) {
+            return($stmt->errorInfo());
         }
+        return $stmt->fetch();
+//        $table = $pdo->query($sql);
+//        foreach ($table as $row) {
+//            return $row;
+//        }
 
     }
 
-    function GetAdminFromGlobals() {
- 
-    if (isset($_SESSION['admin'])) {
-        return $_SESSION['admin'];
+    function getAdminFromGlobals() 
+    {
+        if (isset($_SESSION['admin'])) {
+            return $_SESSION['admin'];
+        } elseif (isset($_COOKIE['admin'])) {
+            return $_COOKIE['admin'];
+        } else {
+            return '';
+        }
     }
-    elseif (isset($_COOKIE['admin'])) {
-        return $_COOKIE['admin'];
-    }
-    else {
-        return '';
-    }
-        
-}
 
-function PutAdminToGlobals($admin) {
-    
-    setcookie('admin', $admin, time() + 3600);
-    $_SESSION['admin'] = $admin;
-    
-}
+    function putAdminToGlobals($admin) 
+    {
+        setcookie('admin', $admin, time() + 3600);
+        $_SESSION['admin'] = $admin;
+    }
 
 } 

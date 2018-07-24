@@ -7,13 +7,13 @@ use Forum;
 class Diploma extends \App\Controller
 {
     
-    public function index ($params) {
-        
+    public function index ($params) 
+    {
         $Db = new \App\Db(); 
         $pdo = $Db->pdo;
 
         $adminsManager = new \Forum\AdminsManager();
-        $admin = $adminsManager->GetAdminFromGlobals();
+        $admin = $adminsManager->getAdminFromGlobals();
         $hidden = FALSE;
         if($admin=='') {
             $hidden = TRUE;
@@ -23,7 +23,7 @@ class Diploma extends \App\Controller
 
         $categories = new \Forum\CategoriesManager();
         $listCategories = $categories->getCategories($pdo);
-        $selectedCategory = $categories->GetCurrentCategoryFromCookies();
+        $selectedCategory = $categories->getCurrentCategoryFromCookies();
 
         $answers = new \Forum\AnswersManager();
         $listAnswers = $answers->getAnswers($pdo);
@@ -37,17 +37,15 @@ class Diploma extends \App\Controller
             'selectedCategory' => $selectedCategory,
             'admin' => $admin)
         );
-        
     }
 
-    public function login ($params) {
-        
+    public function login ($params) 
+    {
         return $this->render('login.tmpl', $params);
-        
     }
 
-    public function sign_in ($params) {
-        
+    public function sign_in ($params) 
+    {
         if ($this->Checklogin()) {
            
             $errors = [];
@@ -60,16 +58,15 @@ class Diploma extends \App\Controller
             $password = filter_input(INPUT_POST, 'password', FILTER_SANITIZE_SPECIAL_CHARS);
 
             if ($this->loginAsAdmin($errors, $login, $password)) {
-                $this->RedirectToHomepage();
+                $this->redirectToHomepage();
             } else {
                 print_r($errors);
             }
         }
-        
     }
     
-    function loginAsAdmin(&$errors, $login, $password) {
-
+    function loginAsAdmin(&$errors, $login, $password) 
+    {
         $Db = new \App\Db();
         $pdo = $Db->pdo;
 
@@ -86,8 +83,8 @@ class Diploma extends \App\Controller
         }
     }
     
-    function Checklogin() {
-
+    function checklogin() 
+    {
         if (!empty($_POST['login']) && !empty($_POST['password']) && !empty($_POST['sign_in'])) {
             return TRUE;
         } else {
@@ -95,24 +92,23 @@ class Diploma extends \App\Controller
         }
     }
     
-    public function logout ($params) {
-        
+    public function logout ($params) 
+    {
         setcookie('admin', "", time() - 3600);
         setcookie('PHPSESSID', "", time() - 3600);
         $_SESSION = [];
         
-        $this->RedirectToHomepage();
-        
+        $this->redirectToHomepage();
     }
     
-    public function accounts ($params) {
-        
+    public function accounts ($params) 
+    {
         $Db = new \App\Db();
         $pdo = $Db->pdo;
         
         $adminsManager = new \Forum\AdminsManager();
         $adminsList = $adminsManager->getAdminsList($pdo);
-        $admin = $adminsManager->GetAdminFromGlobals();
+        $admin = $adminsManager->getAdminFromGlobals();
         
         $categoriesManager = new \Forum\CategoriesManager();
         $listCategories = $categoriesManager->getCategories($pdo);
@@ -126,8 +122,8 @@ class Diploma extends \App\Controller
         
     }
     
-    function ActionAccounts() {
-
+    function actionAccounts() 
+    {
         if (isset($_POST['addAdmin'])) {
 
             $login = filter_input(INPUT_POST, 'login', FILTER_SANITIZE_SPECIAL_CHARS);
@@ -155,12 +151,12 @@ class Diploma extends \App\Controller
             }
         }
         
-        $this->RedirectToHomepage('/accounts');    
+        $this->redirectToHomepage('/accounts');    
         
     }
     
-    public function answer ($params) {
-        
+    public function answer ($params) 
+    {
         $questionId = filter_input(INPUT_GET, 'questionId', FILTER_SANITIZE_SPECIAL_CHARS);
         $answerText = '';
         
@@ -178,8 +174,8 @@ class Diploma extends \App\Controller
               
     }
      
-    public function answerModify ($params) {
-        
+    public function answerModify ($params) 
+    {
         $questionId = filter_input(INPUT_GET, 'questionId', FILTER_SANITIZE_SPECIAL_CHARS);
         $answerId = filter_input(INPUT_GET, 'answerId', FILTER_SANITIZE_SPECIAL_CHARS);
         $answerText = filter_input(INPUT_GET, 'answerText', FILTER_SANITIZE_SPECIAL_CHARS);
@@ -199,20 +195,20 @@ class Diploma extends \App\Controller
               
     }
     
-    public function sendAnswer ($params) {
-        
+    public function sendAnswer ($params) 
+    {
         $questionId = filter_input(INPUT_POST, 'questionId', FILTER_SANITIZE_SPECIAL_CHARS);
         $answer = filter_input(INPUT_POST, 'answer', FILTER_SANITIZE_SPECIAL_CHARS);
 
         $answersManager = new \Forum\AnswersManager();
         $newAnswer = $answersManager->addAnswer($questionId, $answer);
 
-        $this->RedirectToHomepage();
+        $this->redirectToHomepage();
               
     }
     
-    public function changeAnswer ($params) {
-        
+    public function changeAnswer ($params) 
+    {
         $questionId = filter_input(INPUT_POST, 'questionId', FILTER_SANITIZE_SPECIAL_CHARS);
         $answer = filter_input(INPUT_POST, 'answer', FILTER_SANITIZE_SPECIAL_CHARS);
         $answerId = filter_input(INPUT_POST, 'answerId', FILTER_SANITIZE_SPECIAL_CHARS);
@@ -220,12 +216,12 @@ class Diploma extends \App\Controller
         $answersManager = new \Forum\AnswersManager();
         $newAnswer = $answersManager->changeAnswer($answerId, $answer);
 
-        $this->RedirectToHomepage();
+        $this->redirectToHomepage();
               
     }
     
-    public function showAnswers ($params) {
-        
+    public function showAnswers ($params) 
+    {
         $questionId = $this->GetQuestionId();
         
         $Db = new \App\Db();
@@ -238,7 +234,7 @@ class Diploma extends \App\Controller
         $listAnswers = $answers->getAnswersOnQuestions($pdo, $questionId);
 
         $adminManager = new \Forum\AdminsManager();
-        $admin = $adminManager->GetAdminFromGlobals();
+        $admin = $adminManager->getAdminFromGlobals();
         
         return $this->render('answers.tmpl', array(
             'question' => $question,
@@ -249,18 +245,17 @@ class Diploma extends \App\Controller
         
     }
                 
-    function GetQuestionId() {
-
+    function getQuestionId() 
+    {
         if (isset($_GET['questionId'])) {
             $questionId = filter_input(INPUT_GET, 'questionId', FILTER_SANITIZE_SPECIAL_CHARS);
             return $questionId;
         }
-
         return '';
     }
     
-    function GetAnswerText() {
-
+    function getAnswerText() 
+    {
         if (isset($_GET['answerText'])) {
             $answerText = filter_input(INPUT_GET, 'answerText', FILTER_SANITIZE_SPECIAL_CHARS);
             return $answerText;
@@ -269,37 +264,38 @@ class Diploma extends \App\Controller
         return '';
     }
     
-    public function hideQuestion() {
-        
+    public function hideQuestion() 
+    {
         $id = filter_input(INPUT_GET, 'questionId', FILTER_SANITIZE_SPECIAL_CHARS);
         if(!empty($id)) {
             $questionManager = new \Forum\QuestionsManager();
             $questionManager->changeHidden($id, TRUE);
         }
-        $this->RedirectToHomepage();
+        $this->redirectToHomepage();
     }
        
-    public function publishQuestion() {
-        
+    public function publishQuestion() 
+    {
         $id = filter_input(INPUT_GET, 'questionId', FILTER_SANITIZE_SPECIAL_CHARS);
         if(!empty($id)) {
             $questionManager = new \Forum\QuestionsManager();
             $questionManager->changeHidden($id, FALSE);
         }
-        $this->RedirectToHomepage();
+        $this->redirectToHomepage();
     }
     
-    public function deleteQuestion() {
-        
+    public function deleteQuestion() 
+    {
         $id = filter_input(INPUT_GET, 'questionId', FILTER_SANITIZE_SPECIAL_CHARS);
         if(!empty($id)) {
             $questionManager = new \Forum\QuestionsManager();
             $questionManager->deleteQuestion($id);
         }
-        $this->RedirectToHomepage();
+        $this->redirectToHomepage();
     }
     
-    public function askQuestion() {
+    public function askQuestion() 
+    {
         
         $Db = new \App\Db();
         $pdo = $Db->pdo;
@@ -321,8 +317,8 @@ class Diploma extends \App\Controller
                 
     }
     
-    public function questionModify() {
-    
+    public function questionModify() 
+    {
         $Db = new \App\Db();
         $pdo = $Db->pdo;
 
@@ -342,8 +338,8 @@ class Diploma extends \App\Controller
                 
     }
     
-    public function sendQuestion() {
-        
+    public function sendQuestion() 
+    {
         if (isset($_POST['sendQuestion'])) {
 
             $category = filter_input(INPUT_POST, 'category', FILTER_SANITIZE_SPECIAL_CHARS);
@@ -357,11 +353,11 @@ class Diploma extends \App\Controller
 
         }
         
-        $this->RedirectToHomepage();
+        $this->redirectToHomepage();
     }
     
-    public function changeQuestion() {
-        
+    public function changeQuestion() 
+    {
         $category = filter_input(INPUT_POST, 'category', FILTER_SANITIZE_SPECIAL_CHARS);
         $name = filter_input(INPUT_POST, 'name', FILTER_SANITIZE_SPECIAL_CHARS);
         $email = filter_input(INPUT_POST, 'email', FILTER_SANITIZE_SPECIAL_CHARS);
@@ -372,16 +368,17 @@ class Diploma extends \App\Controller
         $questionsManager = new \Forum\QuestionsManager();
         $newQuestion = $questionsManager->changeQuestion($questionId, $topic, $question);
 
-        $this->RedirectToHomepage();
+        $this->redirectToHomepage();
     }
     
-    function Home() {
+    function home() 
+    {
         
-        $this->RedirectToHomepage();
+        $this->redirectToHomepage();
     }
     
-    public function RedirectToHomepage($extra = '') {
-        
+    public function redirectToHomepage($extra = '') 
+    {
         $host  = $_SERVER['HTTP_HOST'];
         $uri = rtrim(dirname($_SERVER['PHP_SELF']), '/\\');
 
