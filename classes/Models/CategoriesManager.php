@@ -27,7 +27,6 @@ class CategoriesManager
 
     public function addTopic($name) 
     {
-
         $Db = new \App\Db();
         $pdo = $Db->pdo;
 
@@ -46,7 +45,7 @@ class CategoriesManager
         $Db = new \App\Db();
         $pdo = $Db->pdo;
 
-        $sql = "delete from categories where id = ?";
+        $sql = "DELETE FROM categories WHERE id = ?";
 
         $stmt = $pdo->prepare($sql);
         $result = $stmt->execute([$id]);
@@ -74,10 +73,16 @@ class CategoriesManager
     function getCategoryByName($pdo, $name) 
     {
 
-        $sql = "SELECT id, name FROM categories where name='" . $name . "'";
-        $table = $pdo->query($sql);
-        foreach ($table as $row) {
-            return $row['id'];
+        $sql = "SELECT id, name FROM categories WHERE name = ?";
+        $stmt = $pdo->prepare($sql);
+        $result = $stmt->execute([$name]);
+
+        if (!$result) {
+            return($stmt->errorInfo());
+        }
+        $table = $stmt->fetchAll();
+        foreach ($table as $key => $value) {
+            return $value['id'];
         }
     }
 

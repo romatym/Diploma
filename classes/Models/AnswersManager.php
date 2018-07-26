@@ -54,9 +54,9 @@ class AnswersManager
     {
 
         $sql = "SELECT answers.id, answers.question_id, answers.answer, answers.user_id,
-            admins.login
+                admins.login
                 FROM answers
-            LEFT JOIN admins on admins.id = answers.user_id";
+                LEFT JOIN admins on admins.id = answers.user_id";
         $stmt = $pdo->prepare($sql);
         $result = $stmt->execute();
 
@@ -70,17 +70,16 @@ class AnswersManager
     {
 
         $sql = "SELECT answers.id, answers.question_id, answers.answer, answers.user_id,
-                    admins.login
+                admins.login
                 FROM answers
-                LEFT JOIN admins on admins.id = answers.user_id
-                WHERE question_id = " . $questionId;
+                LEFT JOIN admins ON admins.id = answers.user_id
+                WHERE question_id = ?";
         $stmt = $pdo->prepare($sql);
-        $result = $stmt->execute();
+        $result = $stmt->execute([$questionId]);
 
         if (!$result) {
             return($stmt->errorInfo());
         }
         return $stmt->fetchAll();
     }
-
 }

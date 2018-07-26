@@ -30,16 +30,14 @@ class QuestionsManager
 
     public function getQuestions($pdo, $hidden) 
     {
-
         $whereCondition = $hidden ? " where not questions.hidden" : "";
-
-        $sql = "SELECT questions.id, questions.question, questions.topic, questions.date, questions.email, questions.hidden, questions.author,
-            admins.login,
-            questions.category_id, categories.name as category
-            FROM questions
-            LEFT JOIN admins on admins.id = questions.admin_id
-            LEFT JOIN categories on categories.id = questions.category_id
-            " . $whereCondition;
+        $sql = "SELECT questions.id, questions.question, questions.category_id, questions.topic, questions.date, questions.email, questions.hidden, questions.author,
+                admins.login,
+                categories.name AS category
+                FROM questions
+                LEFT JOIN admins ON admins.id = questions.admin_id
+                LEFT JOIN categories ON categories.id = questions.category_id
+                " . $whereCondition;
 
         $stmt = $pdo->prepare($sql);
         $result = $stmt->execute();
@@ -63,7 +61,6 @@ class QuestionsManager
                     $branchQuestions[] = $value2;
                 }
             }
-
             $tree[$value1['id']] = $branchQuestions;
         }
 
@@ -72,14 +69,16 @@ class QuestionsManager
 
     function getQuestionById($pdo, $questionId) 
     {
-
-        $sql = "SELECT questions.id, topic, email, category_id, author, question, categories.name as category
+        $sql = "SELECT questions.id, topic, email, category_id, author, question, categories.name AS category
                 FROM questions
-                LEFT JOIN categories on categories.id = questions.category_id
-                where questions.id='" . $questionId . "'";
-        $table = $pdo->query($sql);
-        foreach ($table as $row) {
-            return $row;
+                LEFT JOIN categories ON categories.id = questions.category_id
+                WHERE questions.id= ?";
+        $stmt = $pdo->prepare($sql);
+        $result = $stmt->execute([$questionId]);
+        
+        $table = $stmt->fetchAll();
+        foreach ($table as $key => $value) {
+            return $value;
         }
     }
 
@@ -89,7 +88,7 @@ class QuestionsManager
         $Db = new \App\Db();
         $pdo = $Db->pdo;
 
-        $sql = "delete from questions where id = ?";
+        $sql = "DELETE FROM questions WHERE id = ?";
 
         $stmt = $pdo->prepare($sql);
         $result = $stmt->execute([$id]);
@@ -105,7 +104,7 @@ class QuestionsManager
         $Db = new \App\Db();
         $pdo = $Db->pdo;
 
-        $sql = "UPDATE questions SET hidden = ? where id = ?";
+        $sql = "UPDATE questions SET hidden = ? WHERE id = ?";
 
         $stmt = $pdo->prepare($sql);
         $result = $stmt->execute([$hiddenNewValue, $id]);
@@ -122,7 +121,7 @@ class QuestionsManager
         $Db = new \App\Db();
         $pdo = $Db->pdo;
 
-        $sql = "UPDATE questions SET topic = ?, question = ? where id = ?";
+        $sql = "UPDATE questions SET topic = ?, question = ? WHERE id = ?";
 
         $stmt = $pdo->prepare($sql);
         $result = $stmt->execute([$topic, $text, $id]);
@@ -133,5 +132,4 @@ class QuestionsManager
 
         return TRUE;
     }
-
 }

@@ -71,20 +71,17 @@ class AdminsManager
     function getAdminByLogin($pdo, $login) 
     {
 
-        $sql = "SELECT id, login, password FROM admins WHERE login = ?"; //'" . $login . "'";
-//        $stmt = $pdo->prepare($sql);
+        $sql = "SELECT id, login, password FROM admins WHERE login = ?";
         $stmt = $pdo->prepare($sql);
         $result = $stmt->execute([$login]);
 
         if (!$result) {
             return($stmt->errorInfo());
         }
-        return $stmt->fetch();
-//        $table = $pdo->query($sql);
-//        foreach ($table as $row) {
-//            return $row;
-//        }
-
+        $table = $stmt->fetchAll();
+        foreach ($table as $key => $value) {
+            return $value;
+        }
     }
 
     function getAdminFromGlobals() 
