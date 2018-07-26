@@ -11,7 +11,7 @@ class Diploma extends \App\Controller
     {
         $Db = new \App\Db(); 
         $pdo = $Db->pdo;
-
+        
         $adminsManager = new \Models\AdminsManager();
         $admin = $adminsManager->getAdminFromGlobals();
         $hidden = FALSE;

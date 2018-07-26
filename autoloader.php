@@ -10,7 +10,17 @@ function autoloadVendor($className)
 
 function autoload($className) 
 {
-    $filePath = 'classes' . DIRECTORY_SEPARATOR . $className . '.php';
+    $filePath = ROOTPATH . DIRECTORY_SEPARATOR . 'classes' . DIRECTORY_SEPARATOR . $className . '.php';
+    $filePath = str_replace('\\', DIRECTORY_SEPARATOR, $filePath);
+    if (file_exists($filePath)) {
+        include "$filePath";
+    }
+}
+
+function autoloadModels($className) 
+{
+    $filePath = ROOTPATH . DIRECTORY_SEPARATOR . 'classes' . DIRECTORY_SEPARATOR . $className . '.php';
+    $filePath = str_replace('\\', DIRECTORY_SEPARATOR, $filePath);
     if (file_exists($filePath)) {
         include "$filePath";
     }
@@ -26,7 +36,7 @@ function autoloadApp($className)
 
 function autoloadControllers($className) 
 {
-    $filePath = 'classes' . DIRECTORY_SEPARATOR . 'Controllers' . DIRECTORY_SEPARATOR . $className . '.php';
+    $filePath = ROOTPATH . DIRECTORY_SEPARATOR . 'classes' . DIRECTORY_SEPARATOR . 'Controllers' . DIRECTORY_SEPARATOR . $className . '.php';
     if (file_exists($filePath)) {
         include "$filePath";
     }
@@ -34,15 +44,7 @@ function autoloadControllers($className)
 
 function autoloadDb($className) 
 {
-    $filePath = 'classes' . DIRECTORY_SEPARATOR . 'Db' . DIRECTORY_SEPARATOR . $className . '.php';
-    if (file_exists($filePath)) {
-        include "$filePath";
-    }
-}
-
-function autoloadForum($className) 
-{
-    $filePath = 'classes' . DIRECTORY_SEPARATOR . 'Forum' . DIRECTORY_SEPARATOR . $className . '.php';
+    $filePath = ROOTPATH . 'classes' . DIRECTORY_SEPARATOR . 'Db' . DIRECTORY_SEPARATOR . $className . '.php';
     if (file_exists($filePath)) {
         include "$filePath";
     }
@@ -51,5 +53,5 @@ function autoloadForum($className)
 spl_autoload_register('autoloadVendor');
 spl_autoload_register('autoloadApp');
 spl_autoload_register('autoloadControllers');
-spl_autoload_register('autoloadForum');
+spl_autoload_register('autoloadModels');
 spl_autoload_register('autoload');
