@@ -119,7 +119,47 @@ class Diploma extends \App\Controller
             'admin' => $admin
             )
         );
+    }
+
+    function addAdmin() 
+    {
+        $login = filter_input(INPUT_POST, 'login', FILTER_SANITIZE_SPECIAL_CHARS);
+        $password = filter_input(INPUT_POST, 'password', FILTER_SANITIZE_SPECIAL_CHARS);
+
+        $adminsManager = new \Forum\AdminsManager();
+        $adminsManager->addAdmin($login, $password);
         
+        $this->redirectToHomepage('index.php?action=accounts');
+    }
+    
+    function addTopic() 
+    {
+        $name = filter_input(INPUT_POST, 'topic', FILTER_SANITIZE_SPECIAL_CHARS);
+
+        $categoriesManager = new \Forum\CategoriesManager();
+        $categoriesManager->addTopic($name);
+        
+        $this->redirectToHomepage('index.php?action=accounts');
+    }
+    
+    function deleteTopic() 
+    {
+        $id = filter_input(INPUT_GET, 'id', FILTER_SANITIZE_SPECIAL_CHARS);
+
+        $categoriesManager = new \Forum\CategoriesManager();
+        $categoriesManager->deleteTopic($id);
+        
+        $this->redirectToHomepage('index.php?action=accounts');
+    }
+    
+    function deleteAdmin() 
+    {
+        $id = filter_input(INPUT_GET, 'id', FILTER_SANITIZE_SPECIAL_CHARS);
+
+        $adminsManager = new \Forum\AdminsManager();
+        $adminsManager->deleteAdmin($id);
+        
+        $this->redirectToHomepage('index.php?action=accounts');
     }
     
     function actionAccounts() 
@@ -151,8 +191,7 @@ class Diploma extends \App\Controller
             }
         }
         
-        $this->redirectToHomepage('/accounts');    
-        
+        $this->redirectToHomepage('index.php?action=accounts');    
     }
     
     public function answer ($params) 
@@ -171,7 +210,6 @@ class Diploma extends \App\Controller
             'answerText'=>$answerText
             )
         );
-              
     }
      
     public function answerModify ($params) 
@@ -192,7 +230,6 @@ class Diploma extends \App\Controller
             'answerText'=>$answerText
             )
         );
-              
     }
     
     public function sendAnswer ($params) 
@@ -204,7 +241,6 @@ class Diploma extends \App\Controller
         $newAnswer = $answersManager->addAnswer($questionId, $answer);
 
         $this->redirectToHomepage();
-              
     }
     
     public function changeAnswer ($params) 
@@ -242,7 +278,6 @@ class Diploma extends \App\Controller
             'admin' => $admin
             )
         );
-        
     }
                 
     function getQuestionId() 
@@ -382,7 +417,7 @@ class Diploma extends \App\Controller
         $host  = $_SERVER['HTTP_HOST'];
         $uri = rtrim(dirname($_SERVER['PHP_SELF']), '/\\');
 
-        header("Location: http://$host$uri$extra");
+        header("Location: http://$host$uri/$extra");
         exit;
     }
     

@@ -20,7 +20,7 @@
                           <div class="panel-body" rows="5">{{ question.question }}</div>
                         </div>
                         {% if not admin=='' %}
-                            <a href='questionModify?action=questionModify&questionId={{ question.id }}'>Редактировать вопрос</a>
+                            <a href='index.php?action=questionModify&questionId={{ question.id }}'>Редактировать вопрос</a>
                             <br>
                             <br>
                             <br>
@@ -33,7 +33,7 @@
                                 <div class="panel-body" rows="5">{{ value.answer }}</div>
                             </div>
                             {% if not admin=='' %}
-                            <a href='answerModify?action=answerModify&questionId={{ question.id }}&answerId={{ value.id }}&answerText={{ value.answer }}'>Редактировать ответ</a>
+                            <a href='index.php?action=answerModify&questionId={{ question.id }}&answerId={{ value.id }}&answerText={{ value.answer }}'>Редактировать ответ</a>
                             <br>
                             <br>
                             <br>

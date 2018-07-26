@@ -15,11 +15,10 @@
                 <div class="form-wrap">
                     <h1>Задайте вопрос</h1>
                     
-                    
                     {% if question.id=='' %}
-                        <form action="sendQuestion" method="POST">
+                        <form action="index.php?action=sendQuestion" method="POST">
                     {% else %}
-                        <form action="changeQuestion" method="POST">
+                        <form action="index.php?action=changeQuestion" method="POST">
                     {% endif %}
                         <div class="form-group">
                             <label for="sel1" >Выберите тему:</label>

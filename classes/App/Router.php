@@ -3,22 +3,18 @@ namespace App;
 
 class Router 
 {
-    
     public function resolve () 
     {
-        $route = NULL;
-        if(($pos = strpos($_SERVER['REQUEST_URI'], '?')) !== false) {
-            $route = substr($_SERVER['REQUEST_URI'], 0, $pos);
-        }
-        $route = is_null($route) ? $_SERVER['REQUEST_URI'] : $route;
-        $route = stristr($route, ProjectName);
+        $params = NULL;
+        $result = NULL;
+
+        $route = parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH);
+        $query = parse_url($_SERVER['REQUEST_URI'], PHP_URL_QUERY);
+        parse_str($query, $params);
         
-        $route = explode('/', $route);
-        //array_shift($route);
-        $result[0] = array_shift($route);
-        $result[1] = array_shift($route);
-        $result[2] = array_shift($route);
-        $result[3] = $route;
+        $result[0] = $route;
+        $result[1] = empty($params['action']) ? NULL : $params['action'];
+        $result[2] = $params;
         
         return $result;
         
