@@ -1,6 +1,6 @@
 <?php
 
-namespace Forum;
+namespace Models;
 
 class CategoriesManager 
 {

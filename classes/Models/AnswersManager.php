@@ -1,6 +1,6 @@
 <?php
 
-namespace Forum;
+namespace Models;
 
 class AnswersManager 
 {
@@ -15,7 +15,7 @@ class AnswersManager
         $Db = new \App\Db();
         $pdo = $Db->pdo;
 
-        $adminsManager = new \Forum\AdminsManager();
+        $adminsManager = new \Models\AdminsManager();
         $user = $adminsManager->getAdminFromGlobals();
         $user_id = $adminsManager->getAdminByLogin($pdo, $user);
 
@@ -35,7 +35,7 @@ class AnswersManager
         $Db = new \App\Db();
         $pdo = $Db->pdo;
 
-        $adminsManager = new \Forum\AdminsManager();
+        $adminsManager = new \Models\AdminsManager();
         $user = $adminsManager->getAdminFromGlobals();
         $user_id = $adminsManager->getAdminByLogin($pdo, $user);
 

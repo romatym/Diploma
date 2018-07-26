@@ -2,7 +2,7 @@
 
 namespace Controllers;
 
-use Forum;
+use Models;
 
 class Diploma extends \App\Controller
 {
@@ -12,20 +12,20 @@ class Diploma extends \App\Controller
         $Db = new \App\Db(); 
         $pdo = $Db->pdo;
 
-        $adminsManager = new \Forum\AdminsManager();
+        $adminsManager = new \Models\AdminsManager();
         $admin = $adminsManager->getAdminFromGlobals();
         $hidden = FALSE;
         if($admin=='') {
             $hidden = TRUE;
         }
-        $questions = new \Forum\QuestionsManager();
+        $questions = new \Models\QuestionsManager();
         $listQuestions = $questions->getQuestions($pdo, $hidden);
 
-        $categories = new \Forum\CategoriesManager();
+        $categories = new \Models\CategoriesManager();
         $listCategories = $categories->getCategories($pdo);
         $selectedCategory = $categories->getCurrentCategoryFromCookies();
 
-        $answers = new \Forum\AnswersManager();
+        $answers = new \Models\AnswersManager();
         $listAnswers = $answers->getAnswers($pdo);
 
         $treeOfQuestions = $questions->getTreeOfQuestionsWithAnswers(
@@ -70,7 +70,7 @@ class Diploma extends \App\Controller
         $Db = new \App\Db();
         $pdo = $Db->pdo;
 
-        $adminManager = new \Forum\AdminsManager();
+        $adminManager = new \Models\AdminsManager();
         $adminParameters = $adminManager->getAdminByLogin($pdo, $login);
 
         if ($adminParameters['login'] == $login && $adminParameters['password'] == $password) {
@@ -106,11 +106,11 @@ class Diploma extends \App\Controller
         $Db = new \App\Db();
         $pdo = $Db->pdo;
         
-        $adminsManager = new \Forum\AdminsManager();
+        $adminsManager = new \Models\AdminsManager();
         $adminsList = $adminsManager->getAdminsList($pdo);
         $admin = $adminsManager->getAdminFromGlobals();
         
-        $categoriesManager = new \Forum\CategoriesManager();
+        $categoriesManager = new \Models\CategoriesManager();
         $listCategories = $categoriesManager->getCategories($pdo);
         
         return $this->render('accounts.tmpl', array(
@@ -126,7 +126,7 @@ class Diploma extends \App\Controller
         $login = filter_input(INPUT_POST, 'login', FILTER_SANITIZE_SPECIAL_CHARS);
         $password = filter_input(INPUT_POST, 'password', FILTER_SANITIZE_SPECIAL_CHARS);
 
-        $adminsManager = new \Forum\AdminsManager();
+        $adminsManager = new \Models\AdminsManager();
         $adminsManager->addAdmin($login, $password);
         
         $this->redirectToHomepage('index.php?action=accounts');
@@ -136,7 +136,7 @@ class Diploma extends \App\Controller
     {
         $name = filter_input(INPUT_POST, 'topic', FILTER_SANITIZE_SPECIAL_CHARS);
 
-        $categoriesManager = new \Forum\CategoriesManager();
+        $categoriesManager = new \Models\CategoriesManager();
         $categoriesManager->addTopic($name);
         
         $this->redirectToHomepage('index.php?action=accounts');
@@ -146,7 +146,7 @@ class Diploma extends \App\Controller
     {
         $id = filter_input(INPUT_GET, 'id', FILTER_SANITIZE_SPECIAL_CHARS);
 
-        $categoriesManager = new \Forum\CategoriesManager();
+        $categoriesManager = new \Models\CategoriesManager();
         $categoriesManager->deleteTopic($id);
         
         $this->redirectToHomepage('index.php?action=accounts');
@@ -156,7 +156,7 @@ class Diploma extends \App\Controller
     {
         $id = filter_input(INPUT_GET, 'id', FILTER_SANITIZE_SPECIAL_CHARS);
 
-        $adminsManager = new \Forum\AdminsManager();
+        $adminsManager = new \Models\AdminsManager();
         $adminsManager->deleteAdmin($id);
         
         $this->redirectToHomepage('index.php?action=accounts');
@@ -169,24 +169,24 @@ class Diploma extends \App\Controller
             $login = filter_input(INPUT_POST, 'login', FILTER_SANITIZE_SPECIAL_CHARS);
             $password = filter_input(INPUT_POST, 'password', FILTER_SANITIZE_SPECIAL_CHARS);
 
-            $adminsManager = new \Forum\AdminsManager();
+            $adminsManager = new \Models\AdminsManager();
             $adminsManager->addAdmin($login, $password);
         }
         elseif (isset($_POST['addTopic'])) {
 
             $name = filter_input(INPUT_POST, 'topic', FILTER_SANITIZE_SPECIAL_CHARS);
 
-            $categoriesManager = new \Forum\CategoriesManager();
+            $categoriesManager = new \Models\CategoriesManager();
             $categoriesManager->addTopic($name);
         } elseif (isset($_GET['action'])) {
 
             $id = filter_input(INPUT_GET, 'id', FILTER_SANITIZE_SPECIAL_CHARS);
 
             if ($_GET['action'] == 'deleteTopic') {
-                $categoriesManager = new \Forum\CategoriesManager();
+                $categoriesManager = new \Models\CategoriesManager();
                 $categoriesManager->deleteTopic($id);
             } elseif ($_GET['action'] == 'deleteAdmin') {
-                $adminsManager = new \Forum\AdminsManager();
+                $adminsManager = new \Models\AdminsManager();
                 $adminsManager->deleteAdmin($id);
             }
         }
@@ -202,7 +202,7 @@ class Diploma extends \App\Controller
         $Db = new \App\Db();
         $pdo = $Db->pdo;
         
-        $questionsManager = new \Forum\QuestionsManager();
+        $questionsManager = new \Models\QuestionsManager();
         $question = $questionsManager->getQuestionById($pdo, $questionId);
 
         return $this->render('answer.tmpl', array(
@@ -221,7 +221,7 @@ class Diploma extends \App\Controller
         $Db = new \App\Db();
         $pdo = $Db->pdo;
         
-        $questionsManager = new \Forum\QuestionsManager();
+        $questionsManager = new \Models\QuestionsManager();
         $question = $questionsManager->getQuestionById($pdo, $questionId);
 
         return $this->render('answer.tmpl', array(
@@ -237,7 +237,7 @@ class Diploma extends \App\Controller
         $questionId = filter_input(INPUT_POST, 'questionId', FILTER_SANITIZE_SPECIAL_CHARS);
         $answer = filter_input(INPUT_POST, 'answer', FILTER_SANITIZE_SPECIAL_CHARS);
 
-        $answersManager = new \Forum\AnswersManager();
+        $answersManager = new \Models\AnswersManager();
         $newAnswer = $answersManager->addAnswer($questionId, $answer);
 
         $this->redirectToHomepage();
@@ -249,7 +249,7 @@ class Diploma extends \App\Controller
         $answer = filter_input(INPUT_POST, 'answer', FILTER_SANITIZE_SPECIAL_CHARS);
         $answerId = filter_input(INPUT_POST, 'answerId', FILTER_SANITIZE_SPECIAL_CHARS);
 
-        $answersManager = new \Forum\AnswersManager();
+        $answersManager = new \Models\AnswersManager();
         $newAnswer = $answersManager->changeAnswer($answerId, $answer);
 
         $this->redirectToHomepage();
@@ -263,13 +263,13 @@ class Diploma extends \App\Controller
         $Db = new \App\Db();
         $pdo = $Db->pdo;
         
-        $questionsManager = new \Forum\QuestionsManager();
+        $questionsManager = new \Models\QuestionsManager();
         $question = $questionsManager->getQuestionById($pdo, $questionId);
         
-        $answers = new \Forum\AnswersManager();
+        $answers = new \Models\AnswersManager();
         $listAnswers = $answers->getAnswersOnQuestions($pdo, $questionId);
 
-        $adminManager = new \Forum\AdminsManager();
+        $adminManager = new \Models\AdminsManager();
         $admin = $adminManager->getAdminFromGlobals();
         
         return $this->render('answers.tmpl', array(
@@ -303,7 +303,7 @@ class Diploma extends \App\Controller
     {
         $id = filter_input(INPUT_GET, 'questionId', FILTER_SANITIZE_SPECIAL_CHARS);
         if(!empty($id)) {
-            $questionManager = new \Forum\QuestionsManager();
+            $questionManager = new \Models\QuestionsManager();
             $questionManager->changeHidden($id, TRUE);
         }
         $this->redirectToHomepage();
@@ -313,7 +313,7 @@ class Diploma extends \App\Controller
     {
         $id = filter_input(INPUT_GET, 'questionId', FILTER_SANITIZE_SPECIAL_CHARS);
         if(!empty($id)) {
-            $questionManager = new \Forum\QuestionsManager();
+            $questionManager = new \Models\QuestionsManager();
             $questionManager->changeHidden($id, FALSE);
         }
         $this->redirectToHomepage();
@@ -323,7 +323,7 @@ class Diploma extends \App\Controller
     {
         $id = filter_input(INPUT_GET, 'questionId', FILTER_SANITIZE_SPECIAL_CHARS);
         if(!empty($id)) {
-            $questionManager = new \Forum\QuestionsManager();
+            $questionManager = new \Models\QuestionsManager();
             $questionManager->deleteQuestion($id);
         }
         $this->redirectToHomepage();
@@ -335,7 +335,7 @@ class Diploma extends \App\Controller
         $Db = new \App\Db();
         $pdo = $Db->pdo;
 
-        $categoriesManager = new \Forum\CategoriesManager();
+        $categoriesManager = new \Models\CategoriesManager();
         $listCategories = $categoriesManager->getCategories($pdo);
         
         if (isset($_GET['category'])) {
@@ -357,12 +357,12 @@ class Diploma extends \App\Controller
         $Db = new \App\Db();
         $pdo = $Db->pdo;
 
-        $categoriesManager = new \Forum\CategoriesManager();
+        $categoriesManager = new \Models\CategoriesManager();
         $listCategories = $categoriesManager->getCategories($pdo);
         
         $questionId = filter_input(INPUT_GET, 'questionId', FILTER_SANITIZE_SPECIAL_CHARS);
         
-        $questionsManager = new \Forum\QuestionsManager();
+        $questionsManager = new \Models\QuestionsManager();
         $questionParameters = $questionsManager->getQuestionById($pdo, $questionId);
         
         return $this->render('question.tmpl', array(
@@ -383,7 +383,7 @@ class Diploma extends \App\Controller
             $topic = filter_input(INPUT_POST, 'topic', FILTER_SANITIZE_SPECIAL_CHARS);
             $question = filter_input(INPUT_POST, 'question', FILTER_SANITIZE_SPECIAL_CHARS);
 
-            $questionsManager = new \Forum\QuestionsManager();
+            $questionsManager = new \Models\QuestionsManager();
             $newQuestion = $questionsManager->addQuestion($category, $name, $email, $topic, $question);
 
         }
@@ -400,7 +400,7 @@ class Diploma extends \App\Controller
         $question = filter_input(INPUT_POST, 'question', FILTER_SANITIZE_SPECIAL_CHARS);
         $questionId = filter_input(INPUT_POST, 'questionId', FILTER_SANITIZE_SPECIAL_CHARS);
 
-        $questionsManager = new \Forum\QuestionsManager();
+        $questionsManager = new \Models\QuestionsManager();
         $newQuestion = $questionsManager->changeQuestion($questionId, $topic, $question);
 
         $this->redirectToHomepage();
