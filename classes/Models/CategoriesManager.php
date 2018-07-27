@@ -11,13 +11,23 @@ class CategoriesManager
 
     public function getCategories($pdo) 
     {
-        $sql = "SELECT id, name FROM categories";
+        $sql = "SELECT categories.id, categories.name,
+		count(DISTINCT questions.id) as numberOfQuestions,
+		sum(questions.hidden) as numberOfQuestionsHidden,
+		count(DISTINCT answers.id) as numberOfAnswers
+		FROM categories
+		LEFT JOIN questions ON questions.category_id = categories.id
+		LEFT JOIN answers ON answers.question_id = questions.id
+		group by categories.id";
         $stmt = $pdo->prepare($sql);
         $result = $stmt->execute();
 
         if (!$result) {
             return($stmt->errorInfo());
         }
+        
+        return $stmt->fetchAll();
+        
         $table = [];
         foreach ($stmt->fetchAll() as $key => $value) {
             $table[$value['id']] = $value;
