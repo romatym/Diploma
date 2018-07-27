@@ -52,17 +52,19 @@
                                     <p>{{ valueQuestion.question }}</p>
 
                                     <br>
-                                    <a href='index.php?action=showAnswers&questionId={{ valueQuestion.id }}'>Смотреть ответы</a>
+                                    <p>Статус: {% if valueQuestion.hidden==1 %} Скрыто {% else %} Опубликовано {% endif %}; Всего ответов: {{ valueQuestion.answersNumber }}; Дата создания: {{ valueQuestion.date }} </p>
+                                    <br>
+                                    <a class="cd-faq-link" href='index.php?action=showAnswers&questionId={{ valueQuestion.id }}'>Смотреть ответы</a>
 
                                     {% if admin!='' %}
-                                        <a href='index.php?action=answer&questionId={{ valueQuestion.id }}'>Ответить</a>
+                                        <a class="cd-faq-link" href='index.php?action=answer&questionId={{ valueQuestion.id }}'>Ответить</a>
                                         {% if not valueQuestion.hidden %}
-                                            <a href='index.php?action=hideQuestion&questionId={{ valueQuestion.id }}'>Скрыть</a>
+                                            <a class="cd-faq-link" href='index.php?action=hideQuestion&questionId={{ valueQuestion.id }}'>Скрыть</a>
                                         {% endif %}
                                         {% if valueQuestion.hidden %}
-                                            <a href='index.php?action=publishQuestion&questionId={{ valueQuestion.id }}'>Публиковать</a>
+                                            <a class="cd-faq-link" href='index.php?action=publishQuestion&questionId={{ valueQuestion.id }}'>Публиковать</a>
                                         {% endif %}
-                                        <a href='index.php?action=deleteQuestion&questionId={{ valueQuestion.id }}'>Удалить</a>
+                                        <a class="cd-faq-link" href='index.php?action=deleteQuestion&questionId={{ valueQuestion.id }}'>Удалить</a>
                                     {% endif %}
 				</div> <!-- cd-faq-content -->
                             

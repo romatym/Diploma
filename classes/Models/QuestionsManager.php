@@ -30,17 +30,23 @@ class QuestionsManager
 
     public function getQuestions($pdo, $hidden) 
     {
-        $whereCondition = $hidden ? " where not questions.hidden" : "";
+        $whereCondition = $hidden ? " WHERE NOT questions.hidden" : "";
         $sql = "SELECT questions.id, questions.question, questions.category_id, questions.topic, questions.date, questions.email, questions.hidden, questions.author,
                 admins.login,
-                categories.name AS category
+                categories.name AS category,
+            	count(DISTINCT answers.id) AS answersNumber
                 FROM questions
                 LEFT JOIN admins ON admins.id = questions.admin_id
                 LEFT JOIN categories ON categories.id = questions.category_id
-                " . $whereCondition;
+                LEFT JOIN answers ON answers.question_id = questions.id
+                
+                WHERE (NOT questions.hidden OR ? )
+                
+                group by questions.id
+                ";
 
         $stmt = $pdo->prepare($sql);
-        $result = $stmt->execute();
+        $result = $stmt->execute([!$hidden]);
 
         if (!$result) {
             return($stmt->errorInfo());
