@@ -68,14 +68,19 @@
         <table>
             <tr>
                 <th>Тема</th>
+                <th>Вопросов</th>
+                <th>Скрыто</th>
+                <th>Ответов</th>
                 <th>Действие</th>
             </tr>
                     
-        
                 {% for key,row in topics %}
                 
                 <tr>
                     <td>{{ row.name }}</td>
+                    <td>{{ row.numberOfQuestions }}</td>
+                    <td>{{ row.numberOfQuestionsHidden }}</td>
+                    <td>{{ row.numberOfAnswers }}</td>
                     <td>
                         <a href='?action=changeTopic&id={{row.id}}'>Изменить тему</a>
                         <a href='?action=deleteTopic&id={{row.id}}'>Удалить</a>
