@@ -33,13 +33,15 @@
                                 <div class="panel-body" rows="5">{{ value.answer }}</div>
                             </div>
                             {% if not admin=='' %}
-                            <a href='index.php?action=answerModify&questionId={{ question.id }}&answerId={{ value.id }}&answerText={{ value.answer }}'>Редактировать ответ</a>
-                            <br>
-                            <br>
-                            <br>
+                                <a href='index.php?action=answerModify&questionId={{ question.id }}&answerId={{ value.id }}&answerText={{ value.answer }}'>Редактировать ответ</a>
+                                <br>
+                                <br>
                             {% endif %}
                             
                         {% endfor %}
+                        {% if not admin=='' %}
+                            <a class="cd-faq-link" href='index.php?action=answer&questionId={{ question.id }}'>Ответить</a>
+                        {% endif %}
                     <hr>
                 </div>
             </div> <!-- /.col-xs-12 -->

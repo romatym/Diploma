@@ -18,7 +18,7 @@
                     {% if question.id=='' %}
                         <form action="index.php?action=sendQuestion" method="POST">
                     {% else %}
-                        <form action="index.php?action=changeQuestion" method="POST">
+                        <form action="index.php?action=changeQuestion method="POST">
                     {% endif %}
                         <div class="form-group">
                             <label for="sel1" >Выберите тему:</label>
@@ -51,8 +51,11 @@
                         
                         {% if question.id == '' %}
                             <input type="submit" name="sendQuestion" id="btn-success" class="btn btn-custom btn-lg btn-block" value="Задать">
+                            <input type="hidden" name="action" value="sendQuestion">
                         {% else %}
                             <input type="submit" name="changeQuestion" id="btn-success" class="btn btn-custom btn-lg btn-block" value="Изменить">
+                            <input type="hidden" name="action" value="changeQuestion">
+                            <input type="hidden" name="returnPage" value="{{ returnPage }}">
                         {% endif %}
                         <input type="hidden" name="questionId" value="{{ question.id }}">
 

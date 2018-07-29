@@ -110,8 +110,16 @@ class Diploma extends \App\Controller
         $adminsList = $adminsManager->getAdminsList($pdo);
         $admin = $adminsManager->getAdminFromGlobals();
         
+        $login = filter_input(INPUT_GET, 'login', FILTER_SANITIZE_SPECIAL_CHARS);
+        
         $categoriesManager = new \Models\CategoriesManager();
         $listCategories = $categoriesManager->getCategories($pdo);
+        
+        $topic = filter_input(INPUT_GET, 'topic', FILTER_SANITIZE_SPECIAL_CHARS);
+        $topicId = NULL;
+        if(isset($topic)) {
+            $topicId = $categoriesManager->getCategoryByName($pdo, $topic);
+        }
         
         $questions = new \Models\QuestionsManager();
         $listQuestions = $questions->getQuestionsWithoutAnswers($pdo);
@@ -120,7 +128,10 @@ class Diploma extends \App\Controller
             'admins' => $adminsList,
             'topics' => $listCategories,
             'questions' => $listQuestions,
-            'admin' => $admin
+            'admin' => $admin,
+            'login' => $login,
+            'topic' => $topic, 
+            'topicId' => $topicId
             )
         );
     }
@@ -145,6 +156,28 @@ class Diploma extends \App\Controller
         
         $this->redirectToHomepage('index.php?action=accounts');
     }
+    
+    function modifyTopic() 
+    {
+        $name = filter_input(INPUT_GET, 'name', FILTER_SANITIZE_SPECIAL_CHARS);
+        $id = filter_input(INPUT_GET, 'id', FILTER_SANITIZE_SPECIAL_CHARS);
+
+        $this->redirectToHomepage('?action=accounts&topic='.$name);
+    }
+    
+    
+    function changeTopic() 
+    {
+        $name = filter_input(INPUT_POST, 'topic', FILTER_SANITIZE_SPECIAL_CHARS);
+        $id = filter_input(INPUT_POST, 'topicId', FILTER_SANITIZE_SPECIAL_CHARS);
+
+        $categoriesManager = new \Models\CategoriesManager();
+        $categoriesManager->changeTopic($id, $name);
+        
+        $this->redirectToHomepage('index.php?action=accounts');
+    }
+    
+    
     
     function deleteTopic() 
     {
@@ -380,13 +413,10 @@ class Diploma extends \App\Controller
         
         return $this->render('question.tmpl', array(
             'categories' => $listCategories,
-            'question' => $questionParameters
+            'question' => $questionParameters,
+            'returnPage' => $returnPage
             )
         );
-        
-        if($returnPage=='accounts') {
-            $this->aminZone();
-        }
         
     }
     
@@ -410,25 +440,46 @@ class Diploma extends \App\Controller
     
     public function changeQuestion() 
     {
-        $category = filter_input(INPUT_POST, 'category', FILTER_SANITIZE_SPECIAL_CHARS);
-        $name = filter_input(INPUT_POST, 'name', FILTER_SANITIZE_SPECIAL_CHARS);
-        $email = filter_input(INPUT_POST, 'email', FILTER_SANITIZE_SPECIAL_CHARS);
-        $topic = filter_input(INPUT_POST, 'topic', FILTER_SANITIZE_SPECIAL_CHARS);
-        $question = filter_input(INPUT_POST, 'question', FILTER_SANITIZE_SPECIAL_CHARS);
-        $questionId = filter_input(INPUT_POST, 'questionId', FILTER_SANITIZE_SPECIAL_CHARS);
+        $category = filter_input(INPUT_GET, 'category', FILTER_SANITIZE_SPECIAL_CHARS);
+        $name = filter_input(INPUT_GET, 'name', FILTER_SANITIZE_SPECIAL_CHARS);
+        $email = filter_input(INPUT_GET, 'email', FILTER_SANITIZE_SPECIAL_CHARS);
+        $topic = filter_input(INPUT_GET, 'topic', FILTER_SANITIZE_SPECIAL_CHARS);
+        $question = filter_input(INPUT_GET, 'question', FILTER_SANITIZE_SPECIAL_CHARS);
+        $questionId = filter_input(INPUT_GET, 'questionId', FILTER_SANITIZE_SPECIAL_CHARS);
 
+        $returnPage = filter_input(INPUT_GET, 'returnPage', FILTER_SANITIZE_SPECIAL_CHARS);
+        
         $questionsManager = new \Models\QuestionsManager();
         $newQuestion = $questionsManager->changeQuestion($questionId, $topic, $question);
 
-        $this->redirectToHomepage();
+        if($returnPage=='accounts') {
+            $this->aminZone();
+        }
+        else {
+            $this->redirectToHomepage();
+        }
+        
+    }
+           
+    public function changePassword() 
+    {
+        $login = filter_input(INPUT_GET, 'login', FILTER_SANITIZE_SPECIAL_CHARS);
+        $this->redirectToHomepage('?action=accounts&login='.$login);    
+    }
+    public function changeAdmin() 
+    {
+        $Db = new \App\Db();
+        $pdo = $Db->pdo;
+
+        $login = filter_input(INPUT_POST, 'login', FILTER_SANITIZE_SPECIAL_CHARS);
+        $password = filter_input(INPUT_POST, 'password', FILTER_SANITIZE_SPECIAL_CHARS);
+        
+        $adminManager = new \Models\AdminsManager();
+        $adminManager->setPassword($login, $password);
+        
+        $this->redirectToHomepage('?action=accounts');    
     }
     
-//    public function changeQuestionById($questionId)
-//    {
-//        getQuestionById($pdo, $questionId)
-//    }
-//          
-            
     function home() 
     {
         $this->redirectToHomepage();

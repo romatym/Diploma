@@ -62,8 +62,23 @@ class CategoriesManager
             return($stmt->errorInfo());
         }
     }
+    
+    public function changeTopic($id, $name) 
+    {
+        $Db = new \App\Db();
+        $pdo = $Db->pdo;
 
-    function SetCurrentCategory($Category_id) 
+        $sql = "UPDATE categories SET name = ? WHERE id = ?";
+
+        $stmt = $pdo->prepare($sql);
+        $result = $stmt->execute([$name, $id]);
+
+        if (!$result) {
+            return($stmt->errorInfo());
+        }
+    }
+
+    function setCurrentCategory($Category_id) 
     {
         setcookie('category', $Category_id, time() + 3600);
     }
