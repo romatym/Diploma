@@ -9,9 +9,6 @@ class Diploma extends \App\Controller
     
     public function index ($params) 
     {
-        $Db = new \App\Db(); 
-        $pdo = $Db->pdo;
-        
         $adminsManager = new \Models\AdminsManager();
         $admin = $adminsManager->getAdminFromGlobals();
         $hidden = FALSE;
@@ -19,14 +16,14 @@ class Diploma extends \App\Controller
             $hidden = TRUE;
         }
         $questions = new \Models\QuestionsManager();
-        $listQuestions = $questions->getQuestions($pdo, $hidden);
+        $listQuestions = $questions->getQuestions($hidden);
 
         $categories = new \Models\CategoriesManager();
-        $listCategories = $categories->getCategories($pdo);
+        $listCategories = $categories->getCategories();
         $selectedCategory = $categories->getCurrentCategoryFromCookies();
 
         $answers = new \Models\AnswersManager();
-        $listAnswers = $answers->getAnswers($pdo);
+        $listAnswers = $answers->getAnswers();
 
         $treeOfQuestions = $questions->getTreeOfQuestionsAndAnswers(
                     $listCategories, $listQuestions, $listAnswers);
@@ -67,11 +64,8 @@ class Diploma extends \App\Controller
     
     function loginAsAdmin(&$errors, $login, $password) 
     {
-        $Db = new \App\Db();
-        $pdo = $Db->pdo;
-
         $adminManager = new \Models\AdminsManager();
-        $adminParameters = $adminManager->getAdminByLogin($pdo, $login);
+        $adminParameters = $adminManager->getAdminByLogin($login);
 
         if ($adminParameters['login'] == $login && $adminParameters['password'] == $password) {
             $_SESSION['admin'] = $adminParameters['login'];
@@ -103,26 +97,23 @@ class Diploma extends \App\Controller
     
     public function accounts ($params) 
     {
-        $Db = new \App\Db();
-        $pdo = $Db->pdo;
-        
         $adminsManager = new \Models\AdminsManager();
-        $adminsList = $adminsManager->getAdminsList($pdo);
+        $adminsList = $adminsManager->getAdminsList();
         $admin = $adminsManager->getAdminFromGlobals();
         
         $login = filter_input(INPUT_GET, 'login', FILTER_SANITIZE_SPECIAL_CHARS);
         
         $categoriesManager = new \Models\CategoriesManager();
-        $listCategories = $categoriesManager->getCategories($pdo);
+        $listCategories = $categoriesManager->getCategories();
         
         $topic = filter_input(INPUT_GET, 'topic', FILTER_SANITIZE_SPECIAL_CHARS);
         $topicId = NULL;
         if(isset($topic)) {
-            $topicId = $categoriesManager->getCategoryByName($pdo, $topic);
+            $topicId = $categoriesManager->getCategoryByName($topic);
         }
         
         $questions = new \Models\QuestionsManager();
-        $listQuestions = $questions->getQuestionsWithoutAnswers($pdo);
+        $listQuestions = $questions->getQuestionsWithoutAnswers();
         
         return $this->render('accounts.tmpl', array(
             'admins' => $adminsList,
@@ -236,11 +227,8 @@ class Diploma extends \App\Controller
         $questionId = filter_input(INPUT_GET, 'questionId', FILTER_SANITIZE_SPECIAL_CHARS);
         $answerText = '';
         
-        $Db = new \App\Db();
-        $pdo = $Db->pdo;
-        
         $questionsManager = new \Models\QuestionsManager();
-        $question = $questionsManager->getQuestionById($pdo, $questionId);
+        $question = $questionsManager->getQuestionById($questionId);
 
         return $this->render('answer.tmpl', array(
             'question' => $question,
@@ -255,11 +243,8 @@ class Diploma extends \App\Controller
         $answerId = filter_input(INPUT_GET, 'answerId', FILTER_SANITIZE_SPECIAL_CHARS);
         $answerText = filter_input(INPUT_GET, 'answerText', FILTER_SANITIZE_SPECIAL_CHARS);
         
-        $Db = new \App\Db();
-        $pdo = $Db->pdo;
-        
         $questionsManager = new \Models\QuestionsManager();
-        $question = $questionsManager->getQuestionById($pdo, $questionId);
+        $question = $questionsManager->getQuestionById($questionId);
 
         return $this->render('answer.tmpl', array(
             'question' => $question,
@@ -297,14 +282,11 @@ class Diploma extends \App\Controller
     {
         $questionId = $this->GetQuestionId();
         
-        $Db = new \App\Db();
-        $pdo = $Db->pdo;
-        
         $questionsManager = new \Models\QuestionsManager();
-        $question = $questionsManager->getQuestionById($pdo, $questionId);
+        $question = $questionsManager->getQuestionById($questionId);
         
         $answers = new \Models\AnswersManager();
-        $listAnswers = $answers->getAnswersOnQuestions($pdo, $questionId);
+        $listAnswers = $answers->getAnswersOnQuestions($questionId);
 
         $adminManager = new \Models\AdminsManager();
         $admin = $adminManager->getAdminFromGlobals();
@@ -332,7 +314,6 @@ class Diploma extends \App\Controller
             $answerText = filter_input(INPUT_GET, 'answerText', FILTER_SANITIZE_SPECIAL_CHARS);
             return $answerText;
         }
-
         return '';
     }
     
@@ -376,12 +357,8 @@ class Diploma extends \App\Controller
     
     public function askQuestion() 
     {
-        
-        $Db = new \App\Db();
-        $pdo = $Db->pdo;
-
         $categoriesManager = new \Models\CategoriesManager();
-        $listCategories = $categoriesManager->getCategories($pdo);
+        $listCategories = $categoriesManager->getCategories();
         
         if (isset($_GET['category'])) {
             $currentCategory = filter_input(INPUT_GET, 'category', FILTER_SANITIZE_SPECIAL_CHARS);
@@ -394,22 +371,18 @@ class Diploma extends \App\Controller
             'currentCategory' => $currentCategory
             )
         );
-                
     }
     
     public function questionModify() 
     {
-        $Db = new \App\Db();
-        $pdo = $Db->pdo;
-
         $categoriesManager = new \Models\CategoriesManager();
-        $listCategories = $categoriesManager->getCategories($pdo);
+        $listCategories = $categoriesManager->getCategories();
         
         $questionId = filter_input(INPUT_GET, 'questionId', FILTER_SANITIZE_SPECIAL_CHARS);
         $returnPage = filter_input(INPUT_GET, 'returnPage', FILTER_SANITIZE_SPECIAL_CHARS);
         
         $questionsManager = new \Models\QuestionsManager();
-        $questionParameters = $questionsManager->getQuestionById($pdo, $questionId);
+        $questionParameters = $questionsManager->getQuestionById($questionId);
         
         return $this->render('question.tmpl', array(
             'categories' => $listCategories,
@@ -466,11 +439,9 @@ class Diploma extends \App\Controller
         $login = filter_input(INPUT_GET, 'login', FILTER_SANITIZE_SPECIAL_CHARS);
         $this->redirectToHomepage('?action=accounts&login='.$login);    
     }
+    
     public function changeAdmin() 
     {
-        $Db = new \App\Db();
-        $pdo = $Db->pdo;
-
         $login = filter_input(INPUT_POST, 'login', FILTER_SANITIZE_SPECIAL_CHARS);
         $password = filter_input(INPUT_POST, 'password', FILTER_SANITIZE_SPECIAL_CHARS);
         

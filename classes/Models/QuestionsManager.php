@@ -12,8 +12,7 @@ class QuestionsManager
     public function addQuestion($category, $name, $email, $topic, $question) 
     {
 
-        $Db = new \App\Db();
-        $pdo = $Db->pdo;
+        $pdo = \App\Db::pdo();
 
         $categoriesManager = new CategoriesManager();
         $categoryId = $categoriesManager->getCategoryByName($pdo, $category);
@@ -28,8 +27,9 @@ class QuestionsManager
         return $result;
     }
 
-    public function getQuestions($pdo, $hidden) 
+    public function getQuestions($hidden) 
     {
+        $pdo = \App\Db::pdo();
         $sql = "SELECT questions.id, questions.question, questions.category_id, questions.topic, questions.date, questions.email, questions.hidden, questions.author,
                 admins.login,
                 categories.name AS category,
@@ -53,8 +53,9 @@ class QuestionsManager
         return $stmt->fetchAll();
     }
     
-    public function getQuestionsWithoutAnswers($pdo) 
+    public function getQuestionsWithoutAnswers() 
     {
+        $pdo = \App\Db::pdo();
         $sql = "SELECT questions.id, questions.question, questions.category_id, questions.topic, 
                 questions.date, questions.email, questions.hidden, questions.author,
                 COUNT(DISTINCT answers.id) AS answersNumber
@@ -74,7 +75,6 @@ class QuestionsManager
 
     public function getTreeOfQuestionsAndAnswers($Categories, $Questions, $Answers) 
     {
-
         $tree = [];
 
         foreach ($Categories as $key1 => $value1) {
@@ -91,8 +91,9 @@ class QuestionsManager
         return $tree;
     }
 
-    function getQuestionById($pdo, $questionId) 
+    function getQuestionById($questionId) 
     {
+        $pdo = \App\Db::pdo();
         $sql = "SELECT questions.id, topic, email, category_id, author, question, categories.name AS category
                 FROM questions
                 LEFT JOIN categories ON categories.id = questions.category_id
@@ -108,10 +109,7 @@ class QuestionsManager
 
     public function deleteQuestion($id) 
     {
-
-        $Db = new \App\Db();
-        $pdo = $Db->pdo;
-
+        $pdo = \App\Db::pdo();
         $sql = "DELETE FROM questions WHERE id = ?";
 
         $stmt = $pdo->prepare($sql);
@@ -124,10 +122,7 @@ class QuestionsManager
 
     public function changeHidden($id, $hiddenNewValue) 
     {
-
-        $Db = new \App\Db();
-        $pdo = $Db->pdo;
-
+        $pdo = \App\Db::pdo();
         $sql = "UPDATE questions SET hidden = ? WHERE id = ?";
 
         $stmt = $pdo->prepare($sql);
@@ -141,10 +136,7 @@ class QuestionsManager
 
     public function changeQuestion($id, $topic, $text) 
     {
-
-        $Db = new \App\Db();
-        $pdo = $Db->pdo;
-
+        $pdo = \App\Db::pdo();
         $sql = "UPDATE questions SET topic = ?, question = ? WHERE id = ?";
 
         $stmt = $pdo->prepare($sql);

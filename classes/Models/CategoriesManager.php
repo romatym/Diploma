@@ -9,8 +9,9 @@ class CategoriesManager
     {
     }
 
-    public function getCategories($pdo) 
+    public function getCategories() 
     {
+        $pdo = \App\Db::pdo();
         $sql = "SELECT categories.id, categories.name,
 		count(DISTINCT questions.id) as numberOfQuestions,
 		sum(questions.hidden) as numberOfQuestionsHidden,
@@ -35,10 +36,9 @@ class CategoriesManager
 
     public function addTopic($name) 
     {
-        $Db = new \App\Db();
-        $pdo = $Db->pdo;
-
+        $pdo = \App\Db::pdo();
         $sql = "INSERT INTO categories (name) VALUES (?)";
+        
         $stmt = $pdo->prepare($sql);
         $result = $stmt->execute([$name]);
 
@@ -49,10 +49,7 @@ class CategoriesManager
 
     public function deleteTopic($id) 
     {
-
-        $Db = new \App\Db();
-        $pdo = $Db->pdo;
-
+        $pdo = \App\Db::pdo();
         $sql = "DELETE FROM categories WHERE id = ?";
 
         $stmt = $pdo->prepare($sql);
@@ -65,9 +62,7 @@ class CategoriesManager
     
     public function changeTopic($id, $name) 
     {
-        $Db = new \App\Db();
-        $pdo = $Db->pdo;
-
+        $pdo = \App\Db::pdo();
         $sql = "UPDATE categories SET name = ? WHERE id = ?";
 
         $stmt = $pdo->prepare($sql);
@@ -93,9 +88,9 @@ class CategoriesManager
         }
     }
 
-    function getCategoryByName($pdo, $name) 
+    function getCategoryByName($name) 
     {
-
+        $pdo = \App\Db::pdo();        
         $sql = "SELECT id, name FROM categories WHERE name = ?";
         $stmt = $pdo->prepare($sql);
         $result = $stmt->execute([$name]);

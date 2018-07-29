@@ -11,10 +11,9 @@ class AdminsManager
     
     public function addAdmin($login, $password) 
     {
-        $Db = new \App\Db();
-        $pdo = $Db->pdo;
-        
+        $pdo = \App\Db::pdo();
         $sql = "INSERT INTO admins (login, password) VALUES (?,?)";
+        
         $stmt = $pdo->prepare($sql);
         $result = $stmt->execute([$login, $password]);
 
@@ -25,9 +24,7 @@ class AdminsManager
     
     public function setPassword($login, $password) 
     {
-        $Db = new \App\Db();
-        $pdo = $Db->pdo;
-        
+        $pdo = \App\Db::pdo();
         $sql = "UPDATE admins SET password = ? WHERE login = ?";
 
         $stmt = $pdo->prepare($sql);
@@ -40,10 +37,7 @@ class AdminsManager
     
     public function deleteAdmin($id) 
     {
-        
-        $Db = new \App\Db();
-        $pdo = $Db->pdo;
-        
+        $pdo = \App\Db::pdo();
         $sql = "DELETE FROM admins WHERE id = ?";
 
         $stmt = $pdo->prepare($sql);
@@ -54,9 +48,9 @@ class AdminsManager
         }
     }
     
-    public function getAdminsList($pdo) 
+    public function getAdminsList() 
     {
-
+        $pdo = \App\Db::pdo();
         $sql = "SELECT login, id FROM admins";
 
         $stmt = $pdo->prepare($sql);
@@ -68,10 +62,11 @@ class AdminsManager
         return $stmt->fetchAll();
     }
 
-    function getAdminByLogin($pdo, $login) 
+    function getAdminByLogin($login) 
     {
-
+        $pdo = \App\Db::pdo();
         $sql = "SELECT id, login, password FROM admins WHERE login = ?";
+        
         $stmt = $pdo->prepare($sql);
         $result = $stmt->execute([$login]);
 

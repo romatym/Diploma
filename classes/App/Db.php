@@ -2,16 +2,25 @@
 
 namespace App;
 
-use App;
+use App, PDO;
 
 class Db 
 {
-    public $pdo;
+    //public $pdo;
     
     public function __construct() 
     {
         $settings = $this->getPDOSettings();
         $this->pdo = new \PDO($settings['dsn'], $settings['user'], $settings['pass'], null);
+    }
+    
+    static function pdo() {
+        static $pdo = null;
+        if ($pdo == null) {
+            $settings = self::getPDOSettings();
+            $pdo = new \PDO($settings['dsn'], $settings['user'], $settings['pass'], null);
+        }
+        return $pdo;
     }
     
     protected function getPDOSettings()

@@ -11,15 +11,13 @@ class AnswersManager
 
     public function addAnswer($question_id, $answer) 
     {
-
-        $Db = new \App\Db();
-        $pdo = $Db->pdo;
-
         $adminsManager = new \Models\AdminsManager();
         $user = $adminsManager->getAdminFromGlobals();
-        $user_id = $adminsManager->getAdminByLogin($pdo, $user);
+        $user_id = $adminsManager->getAdminByLogin($user);
 
+        $pdo = \App\Db::pdo();
         $sql = "INSERT INTO answers (question_id, user_id, answer) VALUES (?,?,?)";
+        
         $stmt = $pdo->prepare($sql);
         $result = $stmt->execute([$question_id, $user_id['id'], $answer]);
 
@@ -31,14 +29,11 @@ class AnswersManager
 
     public function changeAnswer($answer_id, $answer) 
     {
-
-        $Db = new \App\Db();
-        $pdo = $Db->pdo;
-
         $adminsManager = new \Models\AdminsManager();
         $user = $adminsManager->getAdminFromGlobals();
-        $user_id = $adminsManager->getAdminByLogin($pdo, $user);
+        $user_id = $adminsManager->getAdminByLogin($user);
 
+        $pdo = \App\Db::pdo();
         $sql = "UPDATE answers SET answer = ?, user_id = ? where id = ?";
 
         $stmt = $pdo->prepare($sql);
@@ -50,9 +45,9 @@ class AnswersManager
         return $result;
     }
 
-    public function getAnswers($pdo) 
+    public function getAnswers() 
     {
-
+        $pdo = \App\Db::pdo();
         $sql = "SELECT answers.id, answers.question_id, answers.answer, answers.user_id,
                 admins.login
                 FROM answers
@@ -66,9 +61,9 @@ class AnswersManager
         return $stmt->fetchAll();
     }
 
-    public function getAnswersOnQuestions($pdo, $questionId) 
+    public function getAnswersOnQuestions($questionId) 
     {
-
+        $pdo = \App\Db::pdo();
         $sql = "SELECT answers.id, answers.question_id, answers.answer, answers.user_id,
                 admins.login
                 FROM answers
