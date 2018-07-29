@@ -15,7 +15,7 @@
 {% if admin=='' %}
     <a href="index.php?action=login">Войти</a>
 {% else %}
-    <a href="index.php?action=accounts">{{ admin }}</a>
+    <a href="index.php?action=accounts">{{ admin }} - вход в админзону</a>
     <a href="index.php?action=logout"> Выйти</a>
 {% endif %}
 <header>
@@ -37,7 +37,8 @@
 
 	<div class="cd-faq-items">
             {% for key,value in treeOfQuestions %}
-		<ul id="{{ categories[key].name }}" class="cd-faq-group">
+                    
+                    <ul id="{{ categories[key].name }}" class="cd-faq-group">
 
 			<li class="cd-faq-title">
                             <h2>{{ categories[key].name }}</h2>
@@ -51,8 +52,7 @@
                                     
                                     <p>{{ valueQuestion.question }}</p>
 
-                                    <br>
-                                    <p>Статус: {% if valueQuestion.hidden==1 %} Скрыто {% else %} Опубликовано {% endif %}; Всего ответов: {{ valueQuestion.answersNumber }}; Дата создания: {{ valueQuestion.date }} </p>
+                                    
                                     <br>
                                     <a class="cd-faq-link" href='index.php?action=showAnswers&questionId={{ valueQuestion.id }}'>Смотреть ответы</a>
 
@@ -65,12 +65,17 @@
                                             <a class="cd-faq-link" href='index.php?action=publishQuestion&questionId={{ valueQuestion.id }}'>Публиковать</a>
                                         {% endif %}
                                         <a class="cd-faq-link" href='index.php?action=deleteQuestion&questionId={{ valueQuestion.id }}'>Удалить</a>
+                                        
+                                        <br>
+                                        <p>Статус: {% if valueQuestion.hidden==1 %} Скрыто {% else %} Опубликовано {% endif %}; Всего ответов: {{ valueQuestion.answersNumber }}; Дата создания: {{ valueQuestion.date }} </p>
                                     {% endif %}
 				</div> <!-- cd-faq-content -->
                             
 			</li>
                     {% endfor %}
+                    
                     <a href='index.php?action=askQuestion&category={{ categories[key].id }}'>Задать вопрос</a>
+
 		</ul> <!-- cd-faq-group -->
             {% endfor %}
 

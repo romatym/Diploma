@@ -28,7 +28,7 @@ class Diploma extends \App\Controller
         $answers = new \Models\AnswersManager();
         $listAnswers = $answers->getAnswers($pdo);
 
-        $treeOfQuestions = $questions->getTreeOfQuestionsWithAnswers(
+        $treeOfQuestions = $questions->getTreeOfQuestionsAndAnswers(
                     $listCategories, $listQuestions, $listAnswers);
         
         return $this->render('index.tmpl', array(
@@ -113,9 +113,13 @@ class Diploma extends \App\Controller
         $categoriesManager = new \Models\CategoriesManager();
         $listCategories = $categoriesManager->getCategories($pdo);
         
+        $questions = new \Models\QuestionsManager();
+        $listQuestions = $questions->getQuestionsWithoutAnswers($pdo);
+        
         return $this->render('accounts.tmpl', array(
             'admins' => $adminsList,
             'topics' => $listCategories,
+            'questions' => $listQuestions,
             'admin' => $admin
             )
         );
@@ -322,11 +326,19 @@ class Diploma extends \App\Controller
     public function deleteQuestion() 
     {
         $id = filter_input(INPUT_GET, 'questionId', FILTER_SANITIZE_SPECIAL_CHARS);
+        $returnPage = filter_input(INPUT_GET, 'returnPage', FILTER_SANITIZE_SPECIAL_CHARS);
+        
         if(!empty($id)) {
             $questionManager = new \Models\QuestionsManager();
             $questionManager->deleteQuestion($id);
         }
-        $this->redirectToHomepage();
+        
+        if($returnPage=='accounts') {
+            $this->aminZone();
+        }
+        else {
+            $this->redirectToHomepage();
+        }
     }
     
     public function askQuestion() 
@@ -346,7 +358,7 @@ class Diploma extends \App\Controller
         
         return $this->render('question.tmpl', array(
             'categories' => $listCategories,
-            'category' => $currentCategory
+            'currentCategory' => $currentCategory
             )
         );
                 
@@ -361,6 +373,7 @@ class Diploma extends \App\Controller
         $listCategories = $categoriesManager->getCategories($pdo);
         
         $questionId = filter_input(INPUT_GET, 'questionId', FILTER_SANITIZE_SPECIAL_CHARS);
+        $returnPage = filter_input(INPUT_GET, 'returnPage', FILTER_SANITIZE_SPECIAL_CHARS);
         
         $questionsManager = new \Models\QuestionsManager();
         $questionParameters = $questionsManager->getQuestionById($pdo, $questionId);
@@ -370,7 +383,11 @@ class Diploma extends \App\Controller
             'question' => $questionParameters
             )
         );
-                
+        
+        if($returnPage=='accounts') {
+            $this->aminZone();
+        }
+        
     }
     
     public function sendQuestion() 
@@ -406,10 +423,19 @@ class Diploma extends \App\Controller
         $this->redirectToHomepage();
     }
     
+//    public function changeQuestionById($questionId)
+//    {
+//        getQuestionById($pdo, $questionId)
+//    }
+//          
+            
     function home() 
     {
-        
         $this->redirectToHomepage();
+    }
+    function aminZone() 
+    {
+        $this->redirectToHomepage('?action=accounts');
     }
     
     public function redirectToHomepage($extra = '') 

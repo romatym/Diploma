@@ -30,7 +30,6 @@ class QuestionsManager
 
     public function getQuestions($pdo, $hidden) 
     {
-        $whereCondition = $hidden ? " WHERE NOT questions.hidden" : "";
         $sql = "SELECT questions.id, questions.question, questions.category_id, questions.topic, questions.date, questions.email, questions.hidden, questions.author,
                 admins.login,
                 categories.name AS category,
@@ -53,8 +52,27 @@ class QuestionsManager
         }
         return $stmt->fetchAll();
     }
+    
+    public function getQuestionsWithoutAnswers($pdo) 
+    {
+        $sql = "SELECT questions.id, questions.question, questions.category_id, questions.topic, 
+                questions.date, questions.email, questions.hidden, questions.author,
+                COUNT(DISTINCT answers.id) AS answersNumber
+                FROM questions
+                LEFT JOIN answers ON answers.question_id = questions.id
+                GROUP BY questions.id
+                HAVING answersNumber=0
+                ";
+        $stmt = $pdo->prepare($sql);
+        $result = $stmt->execute();
+        
+        if (!$result) {
+            return($stmt->errorInfo());
+        }
+        return $stmt->fetchAll();
+    }
 
-    public function getTreeOfQuestionsWithAnswers($Categories, $Questions, $Answers) 
+    public function getTreeOfQuestionsAndAnswers($Categories, $Questions, $Answers) 
     {
 
         $tree = [];

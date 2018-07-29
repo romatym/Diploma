@@ -26,8 +26,6 @@ class CategoriesManager
             return($stmt->errorInfo());
         }
         
-        return $stmt->fetchAll();
-        
         $table = [];
         foreach ($stmt->fetchAll() as $key => $value) {
             $table[$value['id']] = $value;

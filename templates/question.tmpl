@@ -24,7 +24,7 @@
                             <label for="sel1" >Выберите тему:</label>
                             <select class="form-control" name="category" id="sel1">
                                 {% for key,value in categories %}
-                                    {% if value.name == question.category %}
+                                    {% if value.id == currentCategory %}
                                         <option selected>{{ value.name }}</option>
                                     {% else %}
                                         <option>{{ value.name }}</option>

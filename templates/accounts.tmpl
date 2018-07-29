@@ -90,6 +90,34 @@
                 {% endfor %}
                 
         </table>
+        
+        <br>
+        <br>
+
+        <h2>Все вопросы без ответа:</h2>
+        <!--таблица вопросов-->
+        <table>
+            <tr>
+                <th>Тема/th>
+                <th>Вопрос/th>
+                <th>Действие</th>
+            </tr>
+                    
+        
+                {% for key,row in questions %}
+                
+                <tr>
+                    <td>{{ row.topic }}</td>
+                    <td>{{ row.question }}</td>
+                    <td>
+                        <a href='?action=questionModify&questionId={{row.id}}&returnPage=accounts'>Изменить</a>
+                        <a href='?action=deleteQuestion&questionId={{row.id}}&returnPage=accounts'>Удалить</a>
+                    </td>
+                </tr>
+                
+                {% endfor %}
+                
+        </table>
 
         <br>
         <br>
