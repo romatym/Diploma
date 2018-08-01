@@ -110,7 +110,17 @@ class QuestionsManager
     public function deleteQuestion($id) 
     {
         $pdo = \App\Db::pdo();
+        //удаляем вопрос
         $sql = "DELETE FROM questions WHERE id = ?";
+
+        $stmt = $pdo->prepare($sql);
+        $result = $stmt->execute([$id]);
+
+        if (!$result) {
+            return($stmt->errorInfo());
+        }
+        //удаляем ответы на вопрос
+        $sql = "DELETE FROM answers WHERE question_id = ?";
 
         $stmt = $pdo->prepare($sql);
         $result = $stmt->execute([$id]);
