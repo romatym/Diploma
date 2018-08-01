@@ -6,8 +6,11 @@ use Models;
 
 class Diploma extends \App\Controller
 {
-    
-    public function index ($params) 
+ /**
+ * Отображает страницу index
+ * @param $params
+ */
+    public function index () 
     {
         $adminsManager = new \Models\AdminsManager();
         $admin = $adminsManager->getAdminFromGlobals();
