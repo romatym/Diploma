@@ -50,6 +50,12 @@ a {
   color: #a9c056;
   text-decoration: none;
 }
+a.link {
+/*  font-size: 14px;
+  font-size: 0.875rem;
+  line-height: 1.4; */
+  color: #b37700;
+}
 
 /* -------------------------------- 
 

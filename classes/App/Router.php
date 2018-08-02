@@ -3,6 +3,9 @@ namespace App;
 
 class Router 
 {
+ /**
+ * Парсит адресную строку: определяет адрес и  параметры запроса
+ */    
     public function resolve () 
     {
         $params = NULL;

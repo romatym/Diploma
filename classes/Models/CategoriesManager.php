@@ -9,6 +9,9 @@ class CategoriesManager
     {
     }
 
+/**
+ * Получает таблицу категорий вопросов
+ */        
     public function getCategories() 
     {
         $pdo = \App\Db::pdo();
@@ -34,6 +37,9 @@ class CategoriesManager
         return $table;
     }
 
+/**
+ * Добавляет категорию
+ */        
     public function addTopic($name) 
     {
         $pdo = \App\Db::pdo();
@@ -47,6 +53,9 @@ class CategoriesManager
         }
     }
 
+/**
+ * Удаляет категорию по Id
+ */        
     public function deleteTopic($id) 
     {
         $pdo = \App\Db::pdo();
@@ -60,6 +69,9 @@ class CategoriesManager
         }
     }
     
+/**
+ * Изменяет категорию по Id
+ */        
     public function changeTopic($id, $name) 
     {
         $pdo = \App\Db::pdo();
@@ -73,11 +85,17 @@ class CategoriesManager
         }
     }
 
+/**
+ * Устанавливает категорию по Id - текущей в настройках сеанса
+ */     
     function setCurrentCategory($Category_id) 
     {
         setcookie('category', $Category_id, time() + 3600);
     }
 
+/**
+ * Получает текущую категорию из настроек сеанса
+ */         
     function getCurrentCategoryFromCookies() 
     {
 
@@ -88,6 +106,9 @@ class CategoriesManager
         }
     }
 
+/**
+ * Получает Id категории по имени
+ */    
     function getCategoryByName($name) 
     {
         $pdo = \App\Db::pdo();        

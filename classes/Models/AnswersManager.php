@@ -9,6 +9,9 @@ class AnswersManager
     {
     }
 
+/**
+ * Добавляет ответ
+ */    
     public function addAnswer($question_id, $answer) 
     {
         $adminsManager = new \Models\AdminsManager();
@@ -27,6 +30,9 @@ class AnswersManager
         return $result;
     }
 
+/**
+ * Изменяет ответ по Id
+ */    
     public function changeAnswer($answer_id, $answer) 
     {
         $adminsManager = new \Models\AdminsManager();
@@ -45,6 +51,9 @@ class AnswersManager
         return $result;
     }
 
+/**
+ * Полчает таблицу ответов
+ */    
     public function getAnswers() 
     {
         $pdo = \App\Db::pdo();
@@ -61,6 +70,10 @@ class AnswersManager
         return $stmt->fetchAll();
     }
 
+/**
+ * Полчает таблицу ответов на выбранный вопрос по Id вопроса
+ */    
+    
     public function getAnswersOnQuestions($questionId) 
     {
         $pdo = \App\Db::pdo();

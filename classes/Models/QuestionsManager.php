@@ -9,6 +9,9 @@ class QuestionsManager
     {
     }
 
+/**
+ * Добавляет вопрос
+ */    
     public function addQuestion($category, $name, $email, $topic, $question) 
     {
 
@@ -27,6 +30,9 @@ class QuestionsManager
         return $result;
     }
 
+/**
+ * Получает все скрытые / любые вопросы и связанные с ними данные для вывода на главной странице
+ */    
     public function getQuestions($hidden) 
     {
         $pdo = \App\Db::pdo();
@@ -53,6 +59,9 @@ class QuestionsManager
         return $stmt->fetchAll();
     }
     
+/**
+ * Получает все вопросы без ответов
+ */    
     public function getQuestionsWithoutAnswers() 
     {
         $pdo = \App\Db::pdo();
@@ -73,6 +82,9 @@ class QuestionsManager
         return $stmt->fetchAll();
     }
 
+/**
+ * Формирует дерево вопросов-ответов для вывода на главной странице
+ */    
     public function getTreeOfQuestionsAndAnswers($Categories, $Questions, $Answers) 
     {
         $tree = [];
@@ -91,6 +103,9 @@ class QuestionsManager
         return $tree;
     }
 
+/**
+ * Получает данные вопроса по Id
+ */     
     function getQuestionById($questionId) 
     {
         $pdo = \App\Db::pdo();
@@ -107,6 +122,9 @@ class QuestionsManager
         }
     }
 
+/**
+ * Удаляет вопрос по Id
+ */     
     public function deleteQuestion($id) 
     {
         $pdo = \App\Db::pdo();
@@ -130,6 +148,9 @@ class QuestionsManager
         }
     }
 
+/**
+ * Меняет признак hidden у вопроса
+ */     
     public function changeHidden($id, $hiddenNewValue) 
     {
         $pdo = \App\Db::pdo();
@@ -144,6 +165,9 @@ class QuestionsManager
         return TRUE;
     }
 
+/**
+ * Меняет вопрос по Id
+ */    
     public function changeQuestion($id, $topic, $text) 
     {
         $pdo = \App\Db::pdo();

@@ -8,7 +8,6 @@ class Diploma extends \App\Controller
 {
  /**
  * Отображает страницу index
- * @param $params
  */
     public function index () 
     {
@@ -39,32 +38,20 @@ class Diploma extends \App\Controller
         );
     }
 
+/**
+ * Отображает страницу login
+ * @params параметры вывода шаблона
+ */
     public function login ($params) 
     {
         return $this->render('login.tmpl', $params);
     }
 
-    public function sign_in ($params) 
-    {
-        if ($this->Checklogin()) {
-           
-            $errors = [];
-        
-           //************* начало сессии *******************
-            session_start();
-            //************* начало сессии *******************
-
-            $login = filter_input(INPUT_POST, 'login', FILTER_SANITIZE_SPECIAL_CHARS);
-            $password = filter_input(INPUT_POST, 'password', FILTER_SANITIZE_SPECIAL_CHARS);
-
-            if ($this->loginAsAdmin($errors, $login, $password)) {
-                $this->redirectToHomepage();
-            } else {
-                print_r($errors);
-            }
-        }
-    }
-    
+/**
+ * Сверяет введенные логин/пароль с данными БД
+ * $login, $password - введенные пользователем данные
+ * $errors - лог ошибок
+ */
     function loginAsAdmin(&$errors, $login, $password) 
     {
         $adminManager = new \Models\AdminsManager();
@@ -80,6 +67,9 @@ class Diploma extends \App\Controller
         }
     }
     
+/**
+ * Проверяет, авторизован ли админ
+ */    
     function checklogin() 
     {
         if (!empty($_POST['login']) && !empty($_POST['password']) && !empty($_POST['sign_in'])) {
@@ -88,8 +78,11 @@ class Diploma extends \App\Controller
             return FALSE;
         }
     }
-    
-    public function logout ($params) 
+
+/**
+ * разлогинивает администратора
+ */    
+    public function logout () 
     {
         setcookie('admin', "", time() - 3600);
         setcookie('PHPSESSID', "", time() - 3600);
@@ -97,8 +90,33 @@ class Diploma extends \App\Controller
         
         $this->redirectToHomepage();
     }
+
+/**
+ * запускает сессию и сохраняет параметры авторизации
+ */ 
+    public function sign_in ($params) 
+    {
+        if ($this->Checklogin()) {
+           
+            $errors = [];
+        
+           //************* начало сессии *******************
+            session_start();
+            //************* начало сессии *******************
+            $login = filter_input(INPUT_POST, 'login', FILTER_SANITIZE_SPECIAL_CHARS);
+            $password = filter_input(INPUT_POST, 'password', FILTER_SANITIZE_SPECIAL_CHARS);
+            if ($this->loginAsAdmin($errors, $login, $password)) {
+                $this->redirectToHomepage();
+            } else {
+                print_r($errors);
+            }
+        }
+    }
     
-    public function accounts ($params) 
+/**
+ * Отображает страницу accounts
+ */    
+    public function accounts () 
     {
         $adminsManager = new \Models\AdminsManager();
         $adminsList = $adminsManager->getAdminsList();
@@ -130,6 +148,9 @@ class Diploma extends \App\Controller
         );
     }
 
+/**
+ * Добавляет администратора
+ */
     function addAdmin() 
     {
         $login = filter_input(INPUT_POST, 'login', FILTER_SANITIZE_SPECIAL_CHARS);
@@ -140,7 +161,10 @@ class Diploma extends \App\Controller
         
         $this->redirectToHomepage('index.php?action=accounts');
     }
-    
+
+/**
+ * Добавляет категорию
+ */    
     function addTopic() 
     {
         $name = filter_input(INPUT_POST, 'topic', FILTER_SANITIZE_SPECIAL_CHARS);
@@ -150,7 +174,10 @@ class Diploma extends \App\Controller
         
         $this->redirectToHomepage('index.php?action=accounts');
     }
-    
+
+/**
+ * Открывает админзону для изменения категории
+ */    
     function modifyTopic() 
     {
         $name = filter_input(INPUT_GET, 'name', FILTER_SANITIZE_SPECIAL_CHARS);
@@ -159,7 +186,9 @@ class Diploma extends \App\Controller
         $this->redirectToHomepage('?action=accounts&topic='.$name);
     }
     
-    
+/**
+ * Изменяет категорию
+ */    
     function changeTopic() 
     {
         $name = filter_input(INPUT_POST, 'topic', FILTER_SANITIZE_SPECIAL_CHARS);
@@ -172,7 +201,9 @@ class Diploma extends \App\Controller
     }
     
     
-    
+/**
+ * удаляет категорию
+ */    
     function deleteTopic() 
     {
         $id = filter_input(INPUT_GET, 'id', FILTER_SANITIZE_SPECIAL_CHARS);
@@ -182,7 +213,10 @@ class Diploma extends \App\Controller
         
         $this->redirectToHomepage('index.php?action=accounts');
     }
-    
+
+/**
+ * удаляет администратора
+ */    
     function deleteAdmin() 
     {
         $id = filter_input(INPUT_GET, 'id', FILTER_SANITIZE_SPECIAL_CHARS);
@@ -192,7 +226,10 @@ class Diploma extends \App\Controller
         
         $this->redirectToHomepage('index.php?action=accounts');
     }
-    
+
+/**
+ * обрабатывает действие на странице админзоны при нажатии ссылки
+ */    
     function actionAccounts() 
     {
         if (isset($_POST['addAdmin'])) {
@@ -224,8 +261,11 @@ class Diploma extends \App\Controller
         
         $this->redirectToHomepage('index.php?action=accounts');    
     }
-    
-    public function answer ($params) 
+
+/**
+ * открывает страницу answer для ввода ответа на вопрос
+ */    
+    public function answer () 
     {
         $questionId = filter_input(INPUT_GET, 'questionId', FILTER_SANITIZE_SPECIAL_CHARS);
         $answerText = '';
@@ -239,8 +279,11 @@ class Diploma extends \App\Controller
             )
         );
     }
-     
-    public function answerModify ($params) 
+
+/**
+ * открывает страницу answer для редактирования ответа на вопрос
+ */    
+    public function answerModify () 
     {
         $questionId = filter_input(INPUT_GET, 'questionId', FILTER_SANITIZE_SPECIAL_CHARS);
         $answerId = filter_input(INPUT_GET, 'answerId', FILTER_SANITIZE_SPECIAL_CHARS);
@@ -257,7 +300,10 @@ class Diploma extends \App\Controller
         );
     }
     
-    public function sendAnswer ($params) 
+/**
+ * сохраняет введенный ответ на вопрос
+ */    
+    public function sendAnswer () 
     {
         $questionId = filter_input(INPUT_POST, 'questionId', FILTER_SANITIZE_SPECIAL_CHARS);
         $answer = filter_input(INPUT_POST, 'answer', FILTER_SANITIZE_SPECIAL_CHARS);
@@ -267,8 +313,11 @@ class Diploma extends \App\Controller
 
         $this->redirectToHomepage();
     }
-    
-    public function changeAnswer ($params) 
+
+/**
+ * сохраняет измененный ответ на вопрос
+ */    
+    public function changeAnswer () 
     {
         $questionId = filter_input(INPUT_POST, 'questionId', FILTER_SANITIZE_SPECIAL_CHARS);
         $answer = filter_input(INPUT_POST, 'answer', FILTER_SANITIZE_SPECIAL_CHARS);
@@ -280,8 +329,11 @@ class Diploma extends \App\Controller
         $this->redirectToHomepage();
               
     }
-    
-    public function showAnswers ($params) 
+
+/**
+ * Отображает страницу Answers
+ */    
+    public function showAnswers () 
     {
         $questionId = $this->GetQuestionId();
         
@@ -301,7 +353,10 @@ class Diploma extends \App\Controller
             )
         );
     }
-                
+
+/**
+ * получает Id вопроса 
+ */    
     function getQuestionId() 
     {
         if (isset($_GET['questionId'])) {
@@ -311,15 +366,9 @@ class Diploma extends \App\Controller
         return '';
     }
     
-    function getAnswerText() 
-    {
-        if (isset($_GET['answerText'])) {
-            $answerText = filter_input(INPUT_GET, 'answerText', FILTER_SANITIZE_SPECIAL_CHARS);
-            return $answerText;
-        }
-        return '';
-    }
-    
+/**
+ * скрывает вопрос на главной странице
+ */    
     public function hideQuestion() 
     {
         $id = filter_input(INPUT_GET, 'questionId', FILTER_SANITIZE_SPECIAL_CHARS);
@@ -329,7 +378,10 @@ class Diploma extends \App\Controller
         }
         $this->redirectToHomepage();
     }
-       
+
+/**
+ * публикует вопрос на главной странице
+ */    
     public function publishQuestion() 
     {
         $id = filter_input(INPUT_GET, 'questionId', FILTER_SANITIZE_SPECIAL_CHARS);
@@ -339,7 +391,10 @@ class Diploma extends \App\Controller
         }
         $this->redirectToHomepage();
     }
-    
+   
+/**
+ * удаляет вопрос по Id
+ */    
     public function deleteQuestion() 
     {
         $id = filter_input(INPUT_GET, 'questionId', FILTER_SANITIZE_SPECIAL_CHARS);
@@ -357,7 +412,10 @@ class Diploma extends \App\Controller
             $this->redirectToHomepage();
         }
     }
-    
+
+/**
+ * Отображает страницу ввода вопроса question
+ */    
     public function askQuestion() 
     {
         $categoriesManager = new \Models\CategoriesManager();
@@ -375,7 +433,10 @@ class Diploma extends \App\Controller
             )
         );
     }
-    
+ 
+/**
+ * Отображает страницу редактирования вопроса question
+ */    
     public function questionModify() 
     {
         $categoriesManager = new \Models\CategoriesManager();
@@ -396,6 +457,9 @@ class Diploma extends \App\Controller
         
     }
     
+/**
+ * Сохраняет введенный вопрос
+ */    
     public function sendQuestion() 
     {
         if (isset($_POST['sendQuestion'])) {
@@ -414,6 +478,9 @@ class Diploma extends \App\Controller
         $this->redirectToHomepage();
     }
     
+/**
+ * Сохраняет измененный вопрос
+ */    
     public function changeQuestion() 
     {
         $category = filter_input(INPUT_GET, 'category', FILTER_SANITIZE_SPECIAL_CHARS);
@@ -436,13 +503,19 @@ class Diploma extends \App\Controller
         }
         
     }
-           
+
+/**
+ * Открывает страницу для редактирования пароля
+ */    
     public function changePassword() 
     {
         $login = filter_input(INPUT_GET, 'login', FILTER_SANITIZE_SPECIAL_CHARS);
         $this->redirectToHomepage('?action=accounts&login='.$login);    
     }
-    
+
+/**
+ * Сохраняет измененный пароль
+ */    
     public function changeAdmin() 
     {
         $login = filter_input(INPUT_POST, 'login', FILTER_SANITIZE_SPECIAL_CHARS);
@@ -453,16 +526,26 @@ class Diploma extends \App\Controller
         
         $this->redirectToHomepage('?action=accounts');    
     }
-    
+
+/**
+ * Перенаправляет на главную страницу
+ */    
     function home() 
     {
         $this->redirectToHomepage();
     }
+
+/**
+ * Перенаправляет на страницу админзоны
+ */    
     function aminZone() 
     {
         $this->redirectToHomepage('?action=accounts');
     }
-    
+
+/**
+ * Перенаправляет на указанную страницу
+ */    
     public function redirectToHomepage($extra = '') 
     {
         $host  = $_SERVER['HTTP_HOST'];

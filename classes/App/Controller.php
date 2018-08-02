@@ -4,6 +4,9 @@ namespace App;
 
 class Controller 
 {
+ /**
+ * Отображает шаблон страницы и заполняет его данными
+ */
     public function render ($Template, array $params = []) 
     {
         

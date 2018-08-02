@@ -14,6 +14,9 @@ class Db
         $this->pdo = new \PDO($settings['dsn'], $settings['user'], $settings['pass'], null);
     }
     
+/**
+ * Получает объект pdo для работы с базой данных
+ */    
     static function pdo() {
         static $pdo = null;
         if ($pdo == null) {
@@ -23,6 +26,9 @@ class Db
         return $pdo;
     }
     
+/**
+ * Возвращает настройки базы данных
+ */    
     protected function getPDOSettings()
     {
         $config = include ROOTPATH.DIRECTORY_SEPARATOR.'Db'.DIRECTORY_SEPARATOR.'DbConfig.php';
@@ -32,15 +38,4 @@ class Db
         return $result;       
     }
     
-    public function execute($query, array $params=null)
-    {
-        if(is_null($params)){
-            $stmt = $this->pdo->query($query);
-            return $stmt->fetchAll();
-        }
-        $stmt = $this->pdo->prepare($query);
-        $stmt->execute($params);
-        return $stmt->fetchAll();
-        
-    }    
 }

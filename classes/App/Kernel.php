@@ -9,6 +9,9 @@ class Kernel
     public $defaultControllerName = ProjectName;
     public $defaultActionName = "index";
     
+/**
+ * Парсит адресную строку и перенаправляет на действие, согласно полученным данным
+ */    
     public function launch() 
     {
         
@@ -16,7 +19,10 @@ class Kernel
         echo $this->launchAction($controllerName, $actionName, $params);
             
     }
-    
+
+/**
+ * Парсит адресную строку и перенаправляет на указанное действие
+ */        
     public function launchAction($controllerName, $actionName, $params) 
     {
         //$controllerName = empty($controllerName) ? $this->defaultControllerName : ucfirst($controllerName);

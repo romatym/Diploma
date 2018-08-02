@@ -9,6 +9,9 @@ class AdminsManager
     {
     }
     
+/**
+ * Добавляет администоратора
+ */    
     public function addAdmin($login, $password) 
     {
         $pdo = \App\Db::pdo();
@@ -21,7 +24,10 @@ class AdminsManager
             return($stmt->errorInfo());
         }
     }
-    
+
+/**
+ * Изменяет пароль
+ */     
     public function setPassword($login, $password) 
     {
         $pdo = \App\Db::pdo();
@@ -35,6 +41,9 @@ class AdminsManager
         }
     }
     
+/**
+ * Удаляет администоратора по Id
+ */     
     public function deleteAdmin($id) 
     {
         $pdo = \App\Db::pdo();
@@ -47,6 +56,10 @@ class AdminsManager
             return($stmt->errorInfo());
         }
     }
+
+/**
+ * Получает таблицу администраторов
+ */     
     
     public function getAdminsList() 
     {
@@ -62,6 +75,9 @@ class AdminsManager
         return $stmt->fetchAll();
     }
 
+/**
+ * Получает Id администратора по логину
+ */ 
     function getAdminByLogin($login) 
     {
         $pdo = \App\Db::pdo();
@@ -79,6 +95,9 @@ class AdminsManager
         }
     }
 
+/**
+ * Получает администратора, сохраненного в параметрах сеанса
+ */    
     function getAdminFromGlobals() 
     {
         if (isset($_SESSION['admin'])) {
@@ -90,6 +109,9 @@ class AdminsManager
         }
     }
 
+/**
+ * Сохраняет администратора, параметрах сеанса
+ */    
     function putAdminToGlobals($admin) 
     {
         setcookie('admin', $admin, time() + 3600);
