@@ -18,7 +18,7 @@ class QuestionsManager
         $pdo = \App\Db::pdo();
 
         $categoriesManager = new CategoriesManager();
-        $categoryId = $categoriesManager->getCategoryByName($pdo, $category);
+        $categoryId = $categoriesManager->getCategoryByName($category);
 
         $sql = "INSERT INTO questions (category_id, author, email, topic, question, date) VALUES (?,?,?,?,?,?)";
         $stmt = $pdo->prepare($sql);
