@@ -6,8 +6,6 @@ use App, PDO;
 
 class Db 
 {
-    //public $pdo;
-    
     public function __construct() 
     {
         $settings = $this->getPDOSettings();
@@ -31,7 +29,7 @@ class Db
  */    
     protected function getPDOSettings()
     {
-        $config = include ROOTPATH.DIRECTORY_SEPARATOR.'Config'.DIRECTORY_SEPARATOR.'DbConfig.php';
+        $config = include ROOTPATH.DIRECTORY_SEPARATOR.'config'.DIRECTORY_SEPARATOR.'DbConfig.php';
         $result['dsn'] = "{$config['type']}:host={$config['host']};dbname={$config['dbname']};charset={$config['charset']}";
         $result['user'] = $config['user'];
         $result['pass'] = $config['pass'];
