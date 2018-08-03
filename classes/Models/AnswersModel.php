@@ -16,7 +16,7 @@ class AnswersModel {
         $user = $adminsManager->getAdminFromGlobals();
         $admin_id = $adminsManager->getAdminByLogin($user);
 
-        $pdo = \App\Config::pdo();
+        $pdo = \App\Db::pdo();
         $sql = "INSERT INTO answers (question_id, admin_id, answer) VALUES (?,?,?)";
 
         $stmt = $pdo->prepare($sql);
@@ -36,7 +36,7 @@ class AnswersModel {
         $user = $adminsManager->getAdminFromGlobals();
         $admin_id = $adminsManager->getAdminByLogin($user);
 
-        $pdo = \App\Config::pdo();
+        $pdo = \App\Db::pdo();
         $sql = "UPDATE answers SET answer = ?, admin_id = ? where id = ?";
 
         $stmt = $pdo->prepare($sql);
@@ -52,7 +52,7 @@ class AnswersModel {
      * Полчает таблицу ответов
      */
     public function getAnswers() {
-        $pdo = \App\Config::pdo();
+        $pdo = \App\Db::pdo();
         $sql = "SELECT answers.id, answers.question_id, answers.answer, answers.admin_id,
                 admins.login
                 FROM answers
@@ -70,7 +70,7 @@ class AnswersModel {
      * Полчает таблицу ответов на выбранный вопрос по Id вопроса
      */
     public function getAnswersOnQuestions($questionId) {
-        $pdo = \App\Config::pdo();
+        $pdo = \App\Db::pdo();
         $sql = "SELECT answers.id, answers.question_id, answers.answer, answers.admin_id,
                 admins.login
                 FROM answers

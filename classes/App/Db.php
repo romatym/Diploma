@@ -4,7 +4,7 @@ namespace App;
 
 use App, PDO;
 
-class Config 
+class Db 
 {
     //public $pdo;
     
@@ -31,7 +31,7 @@ class Config
  */    
     protected function getPDOSettings()
     {
-        $config = include ROOTPATH.DIRECTORY_SEPARATOR.'Db'.DIRECTORY_SEPARATOR.'DbConfig.php';
+        $config = include ROOTPATH.DIRECTORY_SEPARATOR.'Config'.DIRECTORY_SEPARATOR.'DbConfig.php';
         $result['dsn'] = "{$config['type']}:host={$config['host']};dbname={$config['dbname']};charset={$config['charset']}";
         $result['user'] = $config['user'];
         $result['pass'] = $config['pass'];

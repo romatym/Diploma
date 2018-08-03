@@ -13,7 +13,7 @@ class QuestionsModel {
      */
     public function addQuestion($category, $name, $email, $topic, $question) {
 
-        $pdo = \App\Config::pdo();
+        $pdo = \App\Db::pdo();
 
         $categoriesManager = new CategoriesModel();
         $categoryId = $categoriesManager->getCategoryByName($category);
@@ -32,7 +32,7 @@ class QuestionsModel {
      * Получает все скрытые / любые вопросы и связанные с ними данные для вывода на главной странице
      */
     public function getQuestions($hidden) {
-        $pdo = \App\Config::pdo();
+        $pdo = \App\Db::pdo();
         $sql = "SELECT questions.id, questions.question, questions.category_id, questions.topic, questions.date, questions.email, questions.hidden, questions.author,
                 admins.login,
                 categories.name AS category,
@@ -60,7 +60,7 @@ class QuestionsModel {
      * Получает все вопросы без ответов
      */
     public function getQuestionsWithoutAnswers() {
-        $pdo = \App\Config::pdo();
+        $pdo = \App\Db::pdo();
         $sql = "SELECT questions.id, questions.question, questions.category_id, questions.topic, 
                 questions.date, questions.email, questions.hidden, questions.author,
                 COUNT(DISTINCT answers.id) AS answersNumber
@@ -102,7 +102,7 @@ class QuestionsModel {
      * Получает данные вопроса по Id
      */
     function getQuestionById($questionId) {
-        $pdo = \App\Config::pdo();
+        $pdo = \App\Db::pdo();
         $sql = "SELECT questions.id, topic, email, category_id, author, question, categories.name AS category
                 FROM questions
                 LEFT JOIN categories ON categories.id = questions.category_id
@@ -120,7 +120,7 @@ class QuestionsModel {
      * Удаляет вопрос по Id
      */
     public function deleteQuestion($id) {
-        $pdo = \App\Config::pdo();
+        $pdo = \App\Db::pdo();
         //удаляем вопрос
         $sql = "DELETE FROM questions WHERE id = ?";
 
@@ -145,7 +145,7 @@ class QuestionsModel {
      * Меняет признак hidden у вопроса
      */
     public function changeHidden($id, $hiddenNewValue) {
-        $pdo = \App\Config::pdo();
+        $pdo = \App\Db::pdo();
         $sql = "UPDATE questions SET hidden = ? WHERE id = ?";
 
         $stmt = $pdo->prepare($sql);
@@ -161,7 +161,7 @@ class QuestionsModel {
      * Меняет вопрос по Id
      */
     public function changeQuestion($id, $topic, $text) {
-        $pdo = \App\Config::pdo();
+        $pdo = \App\Db::pdo();
         $sql = "UPDATE questions SET topic = ?, question = ? WHERE id = ?";
 
         $stmt = $pdo->prepare($sql);

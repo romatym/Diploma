@@ -12,7 +12,7 @@ class CategoriesModel {
      * Получает таблицу категорий вопросов
      */
     public function getCategories() {
-        $pdo = \App\Config::pdo();
+        $pdo = \App\Db::pdo();
         $sql = "SELECT categories.id, categories.name,
 		count(DISTINCT questions.id) as numberOfQuestions,
 		sum(questions.hidden) as numberOfQuestionsHidden,
@@ -39,7 +39,7 @@ class CategoriesModel {
      * Добавляет категорию
      */
     public function addTopic($name) {
-        $pdo = \App\Config::pdo();
+        $pdo = \App\Db::pdo();
         $sql = "INSERT INTO categories (name) VALUES (?)";
 
         $stmt = $pdo->prepare($sql);
@@ -54,7 +54,7 @@ class CategoriesModel {
      * Удаляет категорию по Id
      */
     public function deleteTopic($id) {
-        $pdo = \App\Config::pdo();
+        $pdo = \App\Db::pdo();
         $sql = "DELETE FROM categories WHERE id = ?";
 
         $stmt = $pdo->prepare($sql);
@@ -69,7 +69,7 @@ class CategoriesModel {
      * Изменяет категорию по Id
      */
     public function changeTopic($id, $name) {
-        $pdo = \App\Config::pdo();
+        $pdo = \App\Db::pdo();
         $sql = "UPDATE categories SET name = ? WHERE id = ?";
 
         $stmt = $pdo->prepare($sql);
@@ -103,7 +103,7 @@ class CategoriesModel {
      * Получает Id категории по имени
      */
     function getCategoryByName($name) {
-        $pdo = \App\Config::pdo();
+        $pdo = \App\Db::pdo();
         $sql = "SELECT id, name FROM categories WHERE name = ?";
         $stmt = $pdo->prepare($sql);
         $result = $stmt->execute([$name]);

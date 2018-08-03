@@ -12,7 +12,7 @@ class AdminsModel {
      * Добавляет администоратора
      */
     public function addAdmin($login, $password) {
-        $pdo = \App\Config::pdo();
+        $pdo = \App\Db::pdo();
         $sql = "INSERT INTO admins (login, password) VALUES (?,?)";
 
         $stmt = $pdo->prepare($sql);
@@ -27,7 +27,7 @@ class AdminsModel {
      * Изменяет пароль
      */
     public function setPassword($login, $password) {
-        $pdo = \App\Config::pdo();
+        $pdo = \App\Db::pdo();
         $sql = "UPDATE admins SET password = ? WHERE login = ?";
 
         $stmt = $pdo->prepare($sql);
@@ -42,7 +42,7 @@ class AdminsModel {
      * Удаляет администоратора по Id
      */
     public function deleteAdmin($id) {
-        $pdo = \App\Config::pdo();
+        $pdo = \App\Db::pdo();
         $sql = "DELETE FROM admins WHERE id = ?";
 
         $stmt = $pdo->prepare($sql);
@@ -57,7 +57,7 @@ class AdminsModel {
      * Получает таблицу администраторов
      */
     public function getAdminsList() {
-        $pdo = \App\Config::pdo();
+        $pdo = \App\Db::pdo();
         $sql = "SELECT login, id FROM admins";
 
         $stmt = $pdo->prepare($sql);
@@ -73,7 +73,7 @@ class AdminsModel {
      * Получает Id администратора по логину
      */
     function getAdminByLogin($login) {
-        $pdo = \App\Config::pdo();
+        $pdo = \App\Db::pdo();
         $sql = "SELECT id, login, password FROM admins WHERE login = ?";
 
         $stmt = $pdo->prepare($sql);

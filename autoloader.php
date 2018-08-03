@@ -44,7 +44,7 @@ function autoloadControllers($className)
 
 function autoloadDb($className) 
 {
-    $filePath = ROOTPATH . 'classes' . DIRECTORY_SEPARATOR . 'Db' . DIRECTORY_SEPARATOR . $className . '.php';
+    $filePath = ROOTPATH . 'classes' . DIRECTORY_SEPARATOR . 'Config' . DIRECTORY_SEPARATOR . $className . '.php';
     if (file_exists($filePath)) {
         include "$filePath";
     }

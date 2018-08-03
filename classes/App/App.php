@@ -18,7 +18,7 @@ class App
         static::$router = new App\Router();
         static::$kernel = new App\Kernel();
         static::$Controller = new App\Controller();
-        static::$db = new App\Config();
+        static::$db = new App\Db();
        
     }
     
