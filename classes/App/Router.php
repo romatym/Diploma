@@ -6,7 +6,7 @@ class Router
  /**
  * Парсит адресную строку: определяет адрес и  параметры запроса
  */    
-    public function resolve () 
+    public function resolve() 
     {
         $params = NULL;
         $result = NULL;

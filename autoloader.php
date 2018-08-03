@@ -19,7 +19,7 @@ function autoload($className)
 
 function autoloadModels($className) 
 {
-    $filePath = ROOTPATH . DIRECTORY_SEPARATOR . 'classes' . DIRECTORY_SEPARATOR . $className . '.php';
+    $filePath = ROOTPATH . DIRECTORY_SEPARATOR . 'classes' . DIRECTORY_SEPARATOR . 'Models' . $className . '.php';
     $filePath = str_replace('\\', DIRECTORY_SEPARATOR, $filePath);
     if (file_exists($filePath)) {
         include "$filePath";

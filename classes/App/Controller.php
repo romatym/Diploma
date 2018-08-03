@@ -7,7 +7,7 @@ class Controller
  /**
  * Отображает шаблон страницы и заполняет его данными
  */
-    public function render ($Template, array $params = []) 
+    public function render($Template, array $params = []) 
     {
         
         try {

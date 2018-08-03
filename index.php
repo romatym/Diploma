@@ -1,7 +1,7 @@
 <?php
    
 define('ROOTPATH', __DIR__);
-define('ProjectName', 'Diploma');
+//define('ProjectName', 'BaseController');
 
 require_once ROOTPATH.DIRECTORY_SEPARATOR.'autoloader.php';
 

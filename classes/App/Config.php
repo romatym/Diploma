@@ -4,7 +4,7 @@ namespace App;
 
 use App, PDO;
 
-class Db 
+class Config 
 {
     //public $pdo;
     

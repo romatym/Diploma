@@ -2,19 +2,17 @@
 
 namespace Models;
 
-class CategoriesManager 
-{
+class CategoriesModel {
 
-    public function __construct() 
-    {
+    public function __construct() {
+        
     }
 
-/**
- * Получает таблицу категорий вопросов
- */        
-    public function getCategories() 
-    {
-        $pdo = \App\Db::pdo();
+    /**
+     * Получает таблицу категорий вопросов
+     */
+    public function getCategories() {
+        $pdo = \App\Config::pdo();
         $sql = "SELECT categories.id, categories.name,
 		count(DISTINCT questions.id) as numberOfQuestions,
 		sum(questions.hidden) as numberOfQuestionsHidden,
@@ -29,7 +27,7 @@ class CategoriesManager
         if (!$result) {
             return($stmt->errorInfo());
         }
-        
+
         $table = [];
         foreach ($stmt->fetchAll() as $key => $value) {
             $table[$value['id']] = $value;
@@ -37,14 +35,13 @@ class CategoriesManager
         return $table;
     }
 
-/**
- * Добавляет категорию
- */        
-    public function addTopic($name) 
-    {
-        $pdo = \App\Db::pdo();
+    /**
+     * Добавляет категорию
+     */
+    public function addTopic($name) {
+        $pdo = \App\Config::pdo();
         $sql = "INSERT INTO categories (name) VALUES (?)";
-        
+
         $stmt = $pdo->prepare($sql);
         $result = $stmt->execute([$name]);
 
@@ -53,12 +50,11 @@ class CategoriesManager
         }
     }
 
-/**
- * Удаляет категорию по Id
- */        
-    public function deleteTopic($id) 
-    {
-        $pdo = \App\Db::pdo();
+    /**
+     * Удаляет категорию по Id
+     */
+    public function deleteTopic($id) {
+        $pdo = \App\Config::pdo();
         $sql = "DELETE FROM categories WHERE id = ?";
 
         $stmt = $pdo->prepare($sql);
@@ -68,13 +64,12 @@ class CategoriesManager
             return($stmt->errorInfo());
         }
     }
-    
-/**
- * Изменяет категорию по Id
- */        
-    public function changeTopic($id, $name) 
-    {
-        $pdo = \App\Db::pdo();
+
+    /**
+     * Изменяет категорию по Id
+     */
+    public function changeTopic($id, $name) {
+        $pdo = \App\Config::pdo();
         $sql = "UPDATE categories SET name = ? WHERE id = ?";
 
         $stmt = $pdo->prepare($sql);
@@ -85,19 +80,17 @@ class CategoriesManager
         }
     }
 
-/**
- * Устанавливает категорию по Id - текущей в настройках сеанса
- */     
-    function setCurrentCategory($Category_id) 
-    {
+    /**
+     * Устанавливает категорию по Id - текущей в настройках сеанса
+     */
+    function setCurrentCategory($Category_id) {
         setcookie('category', $Category_id, time() + 3600);
     }
 
-/**
- * Получает текущую категорию из настроек сеанса
- */         
-    function getCurrentCategoryFromCookies() 
-    {
+    /**
+     * Получает текущую категорию из настроек сеанса
+     */
+    function getCurrentCategoryFromCookies() {
 
         if (isset($_COOKIE['category'])) {
             return $_COOKIE['category'];
@@ -106,12 +99,11 @@ class CategoriesManager
         }
     }
 
-/**
- * Получает Id категории по имени
- */    
-    function getCategoryByName($name) 
-    {
-        $pdo = \App\Db::pdo();        
+    /**
+     * Получает Id категории по имени
+     */
+    function getCategoryByName($name) {
+        $pdo = \App\Config::pdo();
         $sql = "SELECT id, name FROM categories WHERE name = ?";
         $stmt = $pdo->prepare($sql);
         $result = $stmt->execute([$name]);

@@ -6,7 +6,7 @@ use App;
 
 class Kernel 
 {
-    public $defaultControllerName = ProjectName;
+    public $defaultControllerName = "BaseController";
     public $defaultActionName = "index";
     
 /**

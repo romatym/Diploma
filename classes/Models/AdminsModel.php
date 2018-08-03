@@ -2,21 +2,19 @@
 
 namespace Models;
 
-class AdminsManager 
-{
-    
-    public function __construct() 
-    {
-    }
-    
-/**
- * Добавляет администоратора
- */    
-    public function addAdmin($login, $password) 
-    {
-        $pdo = \App\Db::pdo();
-        $sql = "INSERT INTO admins (login, password) VALUES (?,?)";
+class AdminsModel {
+
+    public function __construct() {
         
+    }
+
+    /**
+     * Добавляет администоратора
+     */
+    public function addAdmin($login, $password) {
+        $pdo = \App\Config::pdo();
+        $sql = "INSERT INTO admins (login, password) VALUES (?,?)";
+
         $stmt = $pdo->prepare($sql);
         $result = $stmt->execute([$login, $password]);
 
@@ -25,12 +23,11 @@ class AdminsManager
         }
     }
 
-/**
- * Изменяет пароль
- */     
-    public function setPassword($login, $password) 
-    {
-        $pdo = \App\Db::pdo();
+    /**
+     * Изменяет пароль
+     */
+    public function setPassword($login, $password) {
+        $pdo = \App\Config::pdo();
         $sql = "UPDATE admins SET password = ? WHERE login = ?";
 
         $stmt = $pdo->prepare($sql);
@@ -40,13 +37,12 @@ class AdminsManager
             return($stmt->errorInfo());
         }
     }
-    
-/**
- * Удаляет администоратора по Id
- */     
-    public function deleteAdmin($id) 
-    {
-        $pdo = \App\Db::pdo();
+
+    /**
+     * Удаляет администоратора по Id
+     */
+    public function deleteAdmin($id) {
+        $pdo = \App\Config::pdo();
         $sql = "DELETE FROM admins WHERE id = ?";
 
         $stmt = $pdo->prepare($sql);
@@ -57,13 +53,11 @@ class AdminsManager
         }
     }
 
-/**
- * Получает таблицу администраторов
- */     
-    
-    public function getAdminsList() 
-    {
-        $pdo = \App\Db::pdo();
+    /**
+     * Получает таблицу администраторов
+     */
+    public function getAdminsList() {
+        $pdo = \App\Config::pdo();
         $sql = "SELECT login, id FROM admins";
 
         $stmt = $pdo->prepare($sql);
@@ -75,14 +69,13 @@ class AdminsManager
         return $stmt->fetchAll();
     }
 
-/**
- * Получает Id администратора по логину
- */ 
-    function getAdminByLogin($login) 
-    {
-        $pdo = \App\Db::pdo();
+    /**
+     * Получает Id администратора по логину
+     */
+    function getAdminByLogin($login) {
+        $pdo = \App\Config::pdo();
         $sql = "SELECT id, login, password FROM admins WHERE login = ?";
-        
+
         $stmt = $pdo->prepare($sql);
         $result = $stmt->execute([$login]);
 
@@ -95,11 +88,10 @@ class AdminsManager
         }
     }
 
-/**
- * Получает администратора, сохраненного в параметрах сеанса
- */    
-    function getAdminFromGlobals() 
-    {
+    /**
+     * Получает администратора, сохраненного в параметрах сеанса
+     */
+    function getAdminFromGlobals() {
         if (isset($_SESSION['admin'])) {
             return $_SESSION['admin'];
         } elseif (isset($_COOKIE['admin'])) {
@@ -109,13 +101,12 @@ class AdminsManager
         }
     }
 
-/**
- * Сохраняет администратора, параметрах сеанса
- */    
-    function putAdminToGlobals($admin) 
-    {
+    /**
+     * Сохраняет администратора, параметрах сеанса
+     */
+    function putAdminToGlobals($admin) {
         setcookie('admin', $admin, time() + 3600);
         $_SESSION['admin'] = $admin;
     }
 
-} 
+}
